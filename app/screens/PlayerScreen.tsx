@@ -14,8 +14,8 @@ import { syncLoadPlayDuration, syncLoadSettings, syncSavePlayDuration } from '..
 import { Colors } from '../../src/theme';
 import { loadSentences } from '../../src/utils/storage';
 
-const SETTINGS_KEY = 'ocat_settings';
-const PLAY_DURATION_KEY = 'ocat_play_duration';
+const SETTINGS_KEY = 'benku_settings';
+const PLAY_DURATION_KEY = 'benku_play_duration';
 
 interface PlaySettings {
   sameSentenceInterval: number;
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 14,
-    borderRadius: 12,
+    borderRadius: 10,
     marginBottom: 8,
     backgroundColor: Colors.card,
   },
@@ -317,8 +317,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 24,
   },
-  ctrlBtn: { width: 56, height: 56, borderRadius: 28, backgroundColor: Colors.ctrlBtnBg, justifyContent: 'center', alignItems: 'center' },
-  playBtn: { width: 72, height: 72, borderRadius: 36, backgroundColor: Colors.playBtnBg, justifyContent: 'center', alignItems: 'center' },
+  ctrlBtn: { width: 56, height: 56, borderRadius: 10, backgroundColor: Colors.ctrlBtnBg, justifyContent: 'center', alignItems: 'center' },
+  playBtn: { width: 72, height: 72, borderRadius: 10, backgroundColor: Colors.playBtnBg, justifyContent: 'center', alignItems: 'center' },
   ctrlText: { fontSize: 22 },
   playText: { fontSize: 28 },
 });

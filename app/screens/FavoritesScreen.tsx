@@ -13,6 +13,8 @@ import {
     TextInput,
     View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { HeadphoneIcon, SettingsIcon } from '../../src/components/icons';
 import { Sentence } from '../../src/models/sentence';
 import { Colors } from '../../src/theme';
 import {
@@ -27,6 +29,7 @@ import {
 } from '../../src/utils/storage';
 
 export default function FavoritesScreen({ onOpenPlayer, onOpenSettings }: { onOpenPlayer: (folder: string | null) => void; onOpenSettings: () => void }) {
+  const insets = useSafeAreaInsets();
   const [sentences, setSentences] = useState<Sentence[]>([]);
   const [folders, setFolders] = useState<string[]>([]);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
@@ -163,10 +166,10 @@ export default function FavoritesScreen({ onOpenPlayer, onOpenSettings }: { onOp
   ), [handleLongPress]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: Math.max(insets.top, 20) }]}>
       <View style={styles.header}>
         <Pressable onPress={onOpenSettings} style={styles.headerBtn}>
-          <Text style={styles.headerIcon}>{'⚙️'}</Text>
+          <SettingsIcon size={20} color={Colors.headerIcon} />
         </Pressable>
         <Text style={styles.headerTitle}>收藏夹</Text>
         <View style={styles.headerActions}>
@@ -208,8 +211,9 @@ export default function FavoritesScreen({ onOpenPlayer, onOpenSettings }: { onOp
 
       <Pressable
         onPress={() => onOpenPlayer(activeFolder)}
-        style={styles.playerFab}>
-        <Text style={styles.playerFabText}>🎧 磨耳朵</Text>
+        style={[styles.playerFab, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
+        <HeadphoneIcon size={18} color={Colors.playerFabText} />
+        <Text style={styles.playerFabText}>磨耳朵</Text>
       </Pressable>
 
       <Modal visible={showCreateFolder} animationType="fade" transparent>
@@ -311,7 +315,7 @@ export default function FavoritesScreen({ onOpenPlayer, onOpenSettings }: { onOp
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.bg },
+  container: { flex: 1, backgroundColor: Colors.bg, width: '100%', overflow: 'hidden' },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -323,16 +327,16 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.headerBorder,
     backgroundColor: Colors.headerBg,
   },
-  headerTitle: { fontSize: 18, fontWeight: '600', color: Colors.headerTitle },
+  headerTitle: { fontSize: 16, fontWeight: '600', color: Colors.headerTitle },
   headerBtn: { padding: 4 },
   headerIcon: { fontSize: 22, color: Colors.headerIcon },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   sortBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: Colors.sortBtnBg, justifyContent: 'center', alignItems: 'center' },
   sortBtnText: { fontSize: 16, color: Colors.sortBtnText, fontWeight: '600' },
-  addFolderBtn: { paddingVertical: 6, paddingHorizontal: 12, backgroundColor: Colors.addFolderBg, borderRadius: 24 },
-  addFolderText: { fontSize: 14, color: Colors.addFolderText, fontWeight: '600' },
+  addFolderBtn: { paddingVertical: 6, paddingHorizontal: 12, backgroundColor: Colors.addFolderBg, borderRadius: 10 },
+  addFolderText: { fontSize: 13, color: Colors.addFolderText, fontWeight: '600' },
   folderRow: { flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 10, gap: 8, flexWrap: 'wrap' },
-  folderChip: { paddingVertical: 6, paddingHorizontal: 14, backgroundColor: Colors.folderChipBg, borderRadius: 16 },
+  folderChip: { paddingVertical: 6, paddingHorizontal: 14, backgroundColor: Colors.folderChipBg, borderRadius: 10 },
   folderChipActive: { backgroundColor: Colors.folderChipActiveBg },
   folderChipText: { fontSize: 13, color: Colors.folderChipText },
   folderChipTextActive: { color: Colors.folderChipActiveText },
@@ -359,22 +363,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.playerFab,
     paddingVertical: 14,
     paddingHorizontal: 28,
-    borderRadius: 28,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 6,
     elevation: 4,
   },
-  playerFabText: { color: Colors.playerFabText, fontSize: 16, fontWeight: '700' },
+  playerFabText: { color: Colors.playerFabText, fontSize: 14, fontWeight: '700' },
   modalOverlay: { flex: 1, backgroundColor: Colors.overlay, justifyContent: 'center', padding: 24 },
-  modalCard: { backgroundColor: Colors.modalBg, borderRadius: 16, padding: 20 },
+  modalCard: { backgroundColor: Colors.modalBg, borderRadius: 10, padding: 20 },
   modalTitle: { fontSize: 17, fontWeight: '700', color: Colors.modalTitle, marginBottom: 16 },
-  modalInput: { borderWidth: 1, borderColor: Colors.modalInputBorder, borderRadius: 12, padding: 12, fontSize: 15, color: Colors.modalInputText, marginBottom: 16, backgroundColor: Colors.modalInputBg },
+  modalInput: { borderWidth: 1, borderColor: Colors.modalInputBorder, borderRadius: 10, padding: 12, fontSize: 15, color: Colors.modalInputText, marginBottom: 16, backgroundColor: Colors.modalInputBg },
   modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 10 },
-  modalCancel: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 24, backgroundColor: Colors.modalCancelBg },
+  modalCancel: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, backgroundColor: Colors.modalCancelBg },
   modalCancelText: { fontSize: 14, color: Colors.modalCancelText, fontWeight: '600' },
-  modalConfirm: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 24, backgroundColor: Colors.modalConfirmBg },
+  modalConfirm: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10, backgroundColor: Colors.modalConfirmBg },
   modalConfirmText: { fontSize: 14, color: Colors.modalConfirmText, fontWeight: '600' },
   menuItem: { paddingVertical: 14, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.divider },
   menuItemText: { fontSize: 16, color: Colors.textPrimary, textAlign: 'center' },

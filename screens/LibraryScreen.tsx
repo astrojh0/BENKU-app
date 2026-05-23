@@ -380,8 +380,8 @@ export default function LibraryScreen() {
             />
             <TextInput style={styles.formInput} placeholder="所属分栏（可选）" value={newFolderName} onChangeText={setNewFolderName} />
             <View style={{ marginTop: 12 }}>
-              <Pressable onPress={handleAutoSplit} style={[styles.actionButton, { backgroundColor: '#2563EB' }]}>
-                <Text style={{ color: '#fff', textAlign: 'center' }}>自动分解并导入</Text>
+              <Pressable onPress={handleAutoSplit} style={[styles.actionButton, { backgroundColor: '#FFD43D' }]}>
+                <Text style={{ color: '#1F2937', textAlign: 'center' }}>自动分解并导入</Text>
               </Pressable>
               <Pressable onPress={() => setShowBulkModal(false)} style={[styles.cancelButton]}>
                 <Text style={{ textAlign: 'center' }}>取消</Text>
@@ -431,14 +431,14 @@ export default function LibraryScreen() {
             <Pressable
               onPress={() => { if (subFolderTarget) handleAssignSubFolder(subFolderTarget, null); setShowSubFolderMenu(false); }}
               style={[styles.folderOption]}>
-              <Text style={{ color: '#0F172A' }}>无分组</Text>
+              <Text style={{ color: '#1F2937' }}>无分组</Text>
             </Pressable>
             {folders.map((f) => (
               <Pressable
                 key={f}
                 onPress={() => { if (subFolderTarget) handleAssignSubFolder(subFolderTarget, f); setShowSubFolderMenu(false); }}
                 style={styles.folderOption}>
-                <Text style={{ color: '#0F172A' }}>{f}</Text>
+                <Text style={{ color: '#1F2937' }}>{f}</Text>
               </Pressable>
             ))}
             <View style={{ marginTop: 12 }}>
@@ -456,8 +456,8 @@ export default function LibraryScreen() {
                     setSubFolderInput('');
                   }
                 }}
-                style={[styles.actionButton, { backgroundColor: '#2563EB' }]}>
-                <Text style={{ color: '#fff', textAlign: 'center' }}>创建并移动</Text>
+                style={[styles.actionButton, { backgroundColor: '#FFD43D' }]}>
+                <Text style={{ color: '#1F2937', textAlign: 'center' }}>创建并移动</Text>
               </Pressable>
             </View>
             <Pressable onPress={() => { setShowSubFolderMenu(false); setSubFolderTarget(null); }} style={[styles.cancelButton]}>
@@ -471,52 +471,52 @@ export default function LibraryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC' },
-  containerFullscreen: { backgroundColor: '#0F172A' },
+  container: { flex: 1, backgroundColor: '#F5F7FA' },
+  containerFullscreen: { backgroundColor: '#F5F7FA' },
   header: { padding: 12 },
   title: { fontSize: 20, fontWeight: '700' },
   headerRow: { flexDirection: 'row', gap: 8, marginTop: 8, flexWrap: 'wrap' },
-  headerButton: { paddingHorizontal: 10, paddingVertical: 6, backgroundColor: '#E6EEF8', borderRadius: 8, marginRight: 8, marginBottom: 4 },
+  headerButton: { paddingHorizontal: 10, paddingVertical: 6, backgroundColor: '#FFF8E1', borderRadius: 8, marginRight: 8, marginBottom: 4 },
   folderRow: { flexDirection: 'row', paddingHorizontal: 12, paddingBottom: 8, flexWrap: 'wrap' },
-  folderButton: { paddingVertical: 6, paddingHorizontal: 10, backgroundColor: '#F1F5F9', borderRadius: 16, marginRight: 8, marginBottom: 8 },
-  folderButtonActive: { backgroundColor: '#2563EB' },
-  folderButtonText: { color: '#0F172A', fontSize: 13 },
-  folderButtonTextActive: { color: '#FFFFFF' },
+  folderButton: { paddingVertical: 6, paddingHorizontal: 10, backgroundColor: '#F3F4F6', borderRadius: 16, marginRight: 8, marginBottom: 8 },
+  folderButtonActive: { backgroundColor: '#FFD43D' },
+  folderButtonText: { color: '#1F2937', fontSize: 13 },
+  folderButtonTextActive: { color: '#1F2937' },
   folderOption: { paddingVertical: 10, paddingHorizontal: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#E5E7EB' },
   item: { backgroundColor: '#fff', borderRadius: 12, padding: 12, marginBottom: 12, flexDirection: 'row', alignItems: 'flex-start' },
   itemText: { fontSize: 16, fontWeight: '600' },
   itemKana: { color: '#6B7280' },
   itemTranslation: { color: '#4B5563', marginTop: 6 },
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 8 },
-  tagBadge: { backgroundColor: '#EEF2FF', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999, marginRight: 6, marginBottom: 6 },
-  tagText: { color: '#3730A3', fontSize: 12 },
+  tagBadge: { backgroundColor: '#F3F4F6', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999, marginRight: 6, marginBottom: 6 },
+  tagText: { color: '#6B7280', fontSize: 12 },
   actions: { marginLeft: 12, alignItems: 'flex-end' },
   iconButton: { paddingVertical: 4, paddingHorizontal: 8, marginBottom: 6, backgroundColor: '#F3F4F6', borderRadius: 8 },
   formInput: { borderWidth: 1, borderColor: '#E5E7EB', padding: 12, borderRadius: 12, marginTop: 12, backgroundColor: '#fff' },
-  actionButton: { backgroundColor: '#10B981', padding: 12, borderRadius: 12, marginTop: 12 },
+  actionButton: { backgroundColor: '#FFD43D', padding: 12, borderRadius: 12, marginTop: 12 },
   cancelButton: { padding: 12, borderRadius: 12, marginTop: 8, backgroundColor: '#F3F4F6' },
-  detailContainer: { flex: 1, backgroundColor: '#0F172A' },
+  detailContainer: { flex: 1, backgroundColor: '#F5F7FA' },
   detailHeader: { flexDirection: 'row', justifyContent: 'flex-end', padding: 16 },
-  detailClose: { paddingVertical: 8, paddingHorizontal: 16, backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 20 },
-  detailCloseText: { color: '#FFFFFF', fontWeight: '600', fontSize: 16 },
+  detailClose: { paddingVertical: 8, paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.05)', borderRadius: 20 },
+  detailCloseText: { color: '#111827', fontWeight: '600', fontSize: 16 },
   detailContent: { padding: 24, paddingBottom: 80 },
-  detailSentence: { fontSize: 36, fontWeight: '800', color: '#FFFFFF', lineHeight: 48, marginBottom: 16 },
-  detailKana: { fontSize: 22, color: '#94A3B8', marginBottom: 12, lineHeight: 30 },
-  detailTranslation: { fontSize: 20, color: '#CBD5E1', lineHeight: 28, marginBottom: 8 },
-  detailDivider: { height: 1, backgroundColor: '#334155', marginVertical: 24 },
-  detailSectionTitle: { fontSize: 16, fontWeight: '700', color: '#94A3B8', marginBottom: 12 },
+  detailSentence: { fontSize: 36, fontWeight: '800', color: '#111827', lineHeight: 48, marginBottom: 16 },
+  detailKana: { fontSize: 22, color: '#6B7280', marginBottom: 12, lineHeight: 30 },
+  detailTranslation: { fontSize: 20, color: '#6B7280', lineHeight: 28, marginBottom: 8 },
+  detailDivider: { height: 1, backgroundColor: '#E5E7EB', marginVertical: 24 },
+  detailSectionTitle: { fontSize: 16, fontWeight: '700', color: '#6B7280', marginBottom: 12 },
   wordRow: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 8 },
-  wordToken: { fontSize: 22, color: '#60A5FA', fontWeight: '600', marginRight: 6, marginBottom: 4, paddingHorizontal: 4, paddingVertical: 2 },
-  sceneReviewButton: { backgroundColor: '#2563EB', paddingVertical: 14, borderRadius: 12, alignItems: 'center', marginBottom: 16 },
-  sceneReviewText: { color: '#FFFFFF', fontWeight: '700', fontSize: 16 },
-  sceneCard: { backgroundColor: '#1E293B', borderRadius: 12, padding: 16, marginBottom: 16 },
-  sceneTitle: { fontSize: 16, fontWeight: '700', color: '#F8FAFC', marginBottom: 12 },
-  sceneLoading: { color: '#94A3B8' },
-  sceneLabel: { fontSize: 13, fontWeight: '600', color: '#64748B', marginTop: 8 },
-  sceneValue: { fontSize: 15, color: '#E2E8F0', marginTop: 4, lineHeight: 22 },
-  sceneKana: { fontSize: 14, color: '#94A3B8', marginTop: 4 },
+  wordToken: { fontSize: 22, color: '#FFD43D', fontWeight: '600', marginRight: 6, marginBottom: 4, paddingHorizontal: 4, paddingVertical: 2 },
+  sceneReviewButton: { backgroundColor: '#FFD43D', paddingVertical: 14, borderRadius: 12, alignItems: 'center', marginBottom: 16 },
+  sceneReviewText: { color: '#1F2937', fontWeight: '700', fontSize: 16 },
+  sceneCard: { backgroundColor: '#FFFFFF', borderRadius: 12, padding: 16, marginBottom: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 3, elevation: 2 },
+  sceneTitle: { fontSize: 16, fontWeight: '700', color: '#111827', marginBottom: 12 },
+  sceneLoading: { color: '#9CA3AF' },
+  sceneLabel: { fontSize: 13, fontWeight: '600', color: '#6B7280', marginTop: 8 },
+  sceneValue: { fontSize: 15, color: '#374151', marginTop: 4, lineHeight: 22 },
+  sceneKana: { fontSize: 14, color: '#6B7280', marginTop: 4 },
   detailTags: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 12 },
-  detailTagBadge: { backgroundColor: '#334155', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999, marginRight: 8, marginBottom: 8 },
-  detailTagText: { color: '#E2E8F0', fontSize: 13 },
-  detailMeta: { color: '#64748B', fontSize: 14 },
+  detailTagBadge: { backgroundColor: '#F3F4F6', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999, marginRight: 8, marginBottom: 8 },
+  detailTagText: { color: '#374151', fontSize: 13 },
+  detailMeta: { color: '#9CA3AF', fontSize: 14 },
 });

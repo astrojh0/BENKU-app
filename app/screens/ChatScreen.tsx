@@ -2,10 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     ActivityIndicator,
     Alert,
+    Animated,
     AppState,
     AppStateStatus,
     FlatList,
     Modal,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -13,12 +15,15 @@ import {
     View
 } from 'react-native';
 import Markdown from 'react-native-markdown-display';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BackIcon, CameraIcon, MenuIcon, PlusIcon, SendIcon } from '../../src/components/icons';
 import { LANGUAGES, useLanguage } from '../../src/contexts/LanguageContext';
 import { QueryMode } from '../../src/services/deepseek';
 import { sendMessage } from '../../src/services/modelService';
 import { Colors } from '../../src/theme';
 import { getAllConversations, saveConversation } from '../../src/utils/conversations';
 import { extractParseItems, parseAIResponse, ParseItem } from '../../src/utils/japaneseParser';
+import { DetectedLanguage, recognizeText } from '../../src/utils/ocr';
 import { addSentence } from '../../src/utils/storage';
 import { speakWithEdgeTTS } from '../../src/utils/tts';
 import Bubble from '../components/Bubble';
@@ -27,7 +32,7 @@ import ModelSelector, { getSelectedModel, ModelType } from '../components/ModelS
 
 const QUICK_BUTTONS: { label: string; mode: QueryMode }[] = [
   { label: '日文怎麼說', mode: 'translate' },
-  { label: '什意思', mode: 'explain' },
+  { label: '什么意思', mode: 'explain' },
   { label: '自由提問', mode: 'free' },
 ];
 
@@ -54,22 +59,60 @@ interface ChatMessage {
 }
 
 export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () => void }) {
+  const insets = useSafeAreaInsets();
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [queryMode, setQueryMode] = useState<QueryMode>('translate');
-  const { learningLanguage, learningLanguageLabel, setLearningLanguage } = useLanguage();
+  const { learningLanguage, learningLanguageLabel, setLearningLanguage, nativeLanguage, nativeLanguageLabel } = useLanguage();
   const [showHistory, setShowHistory] = useState(false);
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [currentModel, setCurrentModel] = useState<ModelType>('deepseek');
   const [quickLangMenuVisible, setQuickLangMenuVisible] = useState(false);
   const [quickLangBtnLayout, setQuickLangBtnLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [ocrLoading, setOcrLoading] = useState(false);
+  const [ocrProgress, setOcrProgress] = useState(0);
+  const glowAnim = useRef(new Animated.Value(0.3)).current;
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
   const quickLangBtnRef = useRef<View>(null);
   const inputRef = useRef<TextInput>(null);
   const listRef = useRef<FlatList>(null);
   const scrollPosRef = useRef<number>(0);
   const appStateRef = useRef<AppStateStatus>(AppState.currentState);
+
+  // 呼吸灯效果
+  useEffect(() => {
+    const breathing = Animated.loop(
+      Animated.sequence([
+        Animated.timing(glowAnim, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: false,
+        }),
+        Animated.timing(glowAnim, {
+          toValue: 0.3,
+          duration: 1500,
+          useNativeDriver: false,
+        }),
+      ])
+    );
+    breathing.start();
+    return () => breathing.stop();
+  }, [glowAnim]);
+
+  // 5秒后停止呼吸灯
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      Animated.timing(glowAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: false,
+      }).start();
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [glowAnim]);
 
   useEffect(() => {
     (async () => {
@@ -183,7 +226,7 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
     setLoading(true);
 
     try {
-      const res = await sendMessage(userMessage, learningLanguage, currentMode, currentModel);
+      const res = await sendMessage(userMessage, learningLanguage, currentMode, currentModel, nativeLanguageLabel);
       const aiMsg: ChatMessage = {
         id: `ai_${Date.now()}`,
         role: 'ai',
@@ -227,6 +270,76 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
     }
     handleSend(rawMsg, btn.mode);
   }, [input, handleSend]);
+
+  // 处理 OCR 识别结果
+  const handleOCRResult = useCallback(async (text: string, language: DetectedLanguage) => {
+    if (!text) {
+      Alert.alert('提示', '未识别到文字');
+      return;
+    }
+
+    if (language === 'japanese') {
+      // 日语：自动发送
+      await handleSend(text);
+    } else if (language === 'chinese') {
+      // 中文：显示在输入框并提示
+      setInput(text);
+      Alert.alert('识别到中文', `${text}\n\n可编辑后发送`);
+    } else {
+      // 其他语言
+      Alert.alert('提示', '请切换到日语后再询问');
+    }
+  }, [handleSend]);
+
+  // 处理图片上传
+  const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setOcrLoading(true);
+    setOcrProgress(0);
+
+    try {
+      const { text, language } = await recognizeText(file, (progress) => {
+        setOcrProgress(Math.round(progress));
+      });
+      await handleOCRResult(text, language);
+    } catch (error) {
+      Alert.alert('识别失败', '请重试或使用其他图片');
+    } finally {
+      setOcrLoading(false);
+      setOcrProgress(0);
+      // 清空 input 以便再次选择同一文件
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  }, [handleOCRResult]);
+
+  // 处理拍照
+  const handleCameraCapture = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setOcrLoading(true);
+    setOcrProgress(0);
+
+    try {
+      const { text, language } = await recognizeText(file, (progress) => {
+        setOcrProgress(Math.round(progress));
+      });
+      await handleOCRResult(text, language);
+    } catch (error) {
+      Alert.alert('识别失败', '请重试或使用其他图片');
+    } finally {
+      setOcrLoading(false);
+      setOcrProgress(0);
+      // 清空 input 以便再次拍摄
+      if (cameraInputRef.current) {
+        cameraInputRef.current.value = '';
+      }
+    }
+  }, [handleOCRResult]);
 
   const handleSaveSentence = useCallback(async (text: string, context?: string) => {
     try {
@@ -352,18 +465,22 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
   }, [learningLanguage, ParseItemRow]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: Math.max(insets.top, 20) }]}>
       <View style={styles.header}>
-        <Pressable onPress={onGoToFavorites} style={styles.headerBtn}>
-          <Text style={styles.headerIcon}>{'<'}</Text>
-        </Pressable>
+        <View style={styles.headerSide}>
+          <Pressable onPress={onGoToFavorites} style={styles.headerBtn}>
+            <BackIcon size={20} color={Colors.headerIcon} />
+          </Pressable>
+        </View>
         <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>OCAT</Text>
+          <Text style={styles.headerTitle}>BENKU</Text>
           <ModelSelector onModelChange={setCurrentModel} />
         </View>
-        <Pressable onPress={() => setShowHistory(true)} style={styles.headerBtn}>
-          <Text style={styles.headerIcon}>{'☰'}</Text>
-        </Pressable>
+        <View style={[styles.headerSide, { alignItems: 'flex-end' }]}>
+          <Pressable onPress={() => setShowHistory(true)} style={styles.headerBtn}>
+            <MenuIcon size={20} color={Colors.headerIcon} />
+          </Pressable>
+        </View>
       </View>
 
       <HistoryModal
@@ -381,7 +498,8 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
         transparent
         animationType="fade"
         onRequestClose={() => setQuickLangMenuVisible(false)}>
-        <Pressable style={styles.quickLangOverlay} onPress={() => setQuickLangMenuVisible(false)}>
+        <View style={styles.quickLangOverlay}>
+          <Pressable style={[styles.quickLangOverlayPressable]} onPress={() => setQuickLangMenuVisible(false)} />
           <View
             style={[
               styles.quickLangMenu,
@@ -390,7 +508,7 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
                 left: quickLangBtnLayout.x,
               },
             ]}>
-            {LANGUAGES.map((lang) => {
+            {LANGUAGES.filter(lang => lang.code !== nativeLanguage).map((lang) => {
               const isSelected = lang.code === learningLanguage;
               return (
                 <Pressable
@@ -407,7 +525,7 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
               );
             })}
           </View>
-        </Pressable>
+        </View>
       </Modal>
 
       <FlatList
@@ -432,7 +550,9 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
                 key={btn.label}
                 ref={quickLangBtnRef}
                 onPress={() => {
-                  if (quickLangBtnRef.current) {
+                  if (!isActive) {
+                    setQueryMode('translate');
+                  } else if (quickLangBtnRef.current) {
                     quickLangBtnRef.current.measureInWindow((x, y, width, height) => {
                       setQuickLangBtnLayout({ x, y, width, height });
                       setQuickLangMenuVisible(true);
@@ -460,28 +580,84 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
         })}
       </View>
 
-      <View style={styles.inputRow}>
+      <Animated.View style={[
+        styles.inputRow, 
+        {
+          shadowOpacity: glowAnim.interpolate({ inputRange: [0, 1], outputRange: [0.1, 0.4] }),
+          borderColor: glowAnim.interpolate({ inputRange: [0, 1], outputRange: ['rgba(255,212,61,0.3)', 'rgba(255,212,61,0.8)']}),
+          borderWidth: glowAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 2] }),
+        }
+      ]}>
+        {/* 隐藏的文件输入 - 图片上传 */}
+        {Platform.OS === 'web' && (
+          <input
+            ref={fileInputRef as any}
+            type="file"
+            accept="image/png,image/jpg,image/webp"
+            style={{ display: 'none' }}
+            onChange={handleImageUpload}
+          />
+        )}
+        {/* 隐藏的文件输入 - 拍照 */}
+        {Platform.OS === 'web' && (
+          <input
+            ref={cameraInputRef as any}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            style={{ display: 'none' }}
+            onChange={handleCameraCapture}
+          />
+        )}
+        
         <TextInput
           ref={inputRef}
           style={styles.input}
-          placeholder="输入母语句子或单词..."
+          placeholder={queryMode === 'free' ? '来聊聊吧' : '输入想问的句子或单词'}
           placeholderTextColor={Colors.inputPlaceholder}
           value={input}
           onChangeText={setInput}
           returnKeyType="send"
           onSubmitEditing={() => handleSend()}
         />
+        
         <Pressable
           onPress={() => handleSend()}
           style={[styles.sendBtn, loading && styles.sendBtnDisabled]}
           disabled={loading}>
           {loading ? (
-            <ActivityIndicator color="#FFFFFF" size="small" />
+            <ActivityIndicator color="#1F2937" size="small" />
           ) : (
-            <Text style={styles.sendIcon}>➤</Text>
+            <SendIcon size={22} color="#1F2937" />
           )}
         </Pressable>
-      </View>
+        
+        {/* 相机和+按钮 - 仅在"什么意思"模式下显示 */}
+        {queryMode === 'explain' && Platform.OS === 'web' && (
+          <View style={styles.ocrButtonsRow}>
+            <Pressable
+              onPress={() => (cameraInputRef as any).current?.click()}
+              style={styles.cameraBtn}
+              disabled={ocrLoading}>
+              {ocrLoading ? (
+                <ActivityIndicator color="#1F2937" size="small" />
+              ) : (
+                <CameraIcon size={22} color="#000000" />
+              )}
+            </Pressable>
+            <Pressable
+              onPress={() => (fileInputRef as any).current?.click()}
+              style={styles.ocrBtn}
+              disabled={ocrLoading}>
+              {ocrLoading ? (
+                <Text style={styles.ocrLoadingText}>{ocrProgress}%</Text>
+              ) : (
+                <PlusIcon size={22} color="#000000" />
+              )}
+            </Pressable>
+          </View>
+        )}
+      </Animated.View>
     </View>
   );
 }
@@ -515,33 +691,42 @@ const markdownStyles = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.bg },
+  container: { flex: 1, backgroundColor: Colors.bg, width: '100%', overflow: 'hidden' },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    height: 56,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: Colors.headerBorder,
     backgroundColor: Colors.headerBg,
+    backdropFilter: 'blur(20px)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
   },
-  headerCenter: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  headerTitle: { fontSize: 18, fontWeight: '600', color: Colors.headerTitle },
-  headerBtn: { padding: 4, marginTop: 2 },
+  headerTitle: { fontSize: 16, fontWeight: '600', color: Colors.headerTitle },
+  headerCenter: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  headerSide: { width: 40, alignItems: 'flex-start', justifyContent: 'center' },
+  headerBtn: { padding: 4 },
   headerIcon: { fontSize: 22, color: Colors.headerIcon },
   listContent: { paddingHorizontal: 16, paddingVertical: 12 },
   userBubble: {
     alignSelf: 'flex-end',
     backgroundColor: Colors.bubbleUser,
-    borderRadius: 18,
+    borderRadius: 10,
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 12,
     marginBottom: 12,
     maxWidth: '80%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 3,
   },
   userText: { fontSize: 15, color: Colors.bubbleUserText, lineHeight: 21 },
   aiCard: {
@@ -552,36 +737,42 @@ const styles = StyleSheet.create({
   aiHeading: {
     fontWeight: 'bold',
     fontSize: 15,
-    color: '#8E8E93',
+    color: '#6B7280',
     marginTop: 12,
     marginBottom: 6,
   },
   quickRow: {
     flexDirection: 'row',
+    justifyContent: 'flex-start',
     paddingHorizontal: 16,
     paddingBottom: 8,
-    gap: 8,
+    gap: 12,
   },
   quickBtn: {
-    backgroundColor: Colors.quickBtnBg,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 18,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 16,
   },
   quickBtnActive: {
     backgroundColor: Colors.quickBtnActiveBg,
   },
-  quickBtnText: { fontSize: 14, color: Colors.quickBtnText, fontWeight: '500' },
-  quickBtnTextActive: { color: Colors.quickBtnActiveText },
-  quickBtnArrow: { fontSize: 9, color: Colors.quickBtnText },
+  quickBtnText: { fontSize: 13, color: '#717182', fontWeight: '500' },
+  quickBtnTextActive: { color: '#ffffff' },
+  quickBtnArrow: { fontSize: 9, color: '#717182' },
   quickLangOverlay: {
+    flex: 1,
+  },
+  quickLangOverlayPressable: {
     flex: 1,
     backgroundColor: Colors.overlay,
   },
   quickLangMenu: {
     position: 'absolute',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: Colors.modalBg,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -601,40 +792,92 @@ const styles = StyleSheet.create({
   quickLangMenuItemText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1C1C1E',
+    color: '#111827',
   },
   quickLangMenuItemTextActive: {
-    color: '#0F172A',
+    color: '#1F2937',
   },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: Colors.headerBorder,
-    gap: 10,
-    backgroundColor: Colors.bg,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.2)',
+    gap: 8,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
   input: {
     flex: 1,
-    height: 44,
-    backgroundColor: Colors.inputBg,
-    borderRadius: 22,
+    height: 40,
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderRadius: 20,
     paddingHorizontal: 16,
     fontSize: 15,
     color: Colors.textPrimary,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.4)',
   },
   sendBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Colors.sendBtn,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  ocrBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  ocrLoadingText: {
+    fontSize: 10,
+    color: '#717182',
+  },
+  cameraBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 8,
+  },
+  ocrRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+    marginTop: 8,
+    gap: 12,
+  },
+  ocrButtonsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginLeft: 8,
+  },
   sendBtnDisabled: { opacity: 0.6 },
-  sendIcon: { color: Colors.bg, fontSize: 18, fontWeight: '700' },
+  sendIcon: { color: '#030213', fontSize: 18, fontWeight: '700' },
   parseItemRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',

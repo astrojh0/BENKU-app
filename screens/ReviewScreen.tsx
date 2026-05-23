@@ -15,7 +15,7 @@ import {
 import { Sentence } from '../src/models/sentence';
 import { loadSentences } from '../src/utils/storage';
 
-const PLAY_DURATION_KEY = 'ocat_play_duration';
+const PLAY_DURATION_KEY = 'benku_play_duration';
 
 export default function ReviewScreen() {
   const [sentences, setSentences] = useState<Sentence[]>([]);
@@ -361,7 +361,7 @@ export default function ReviewScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC' },
+  container: { flex: 1, backgroundColor: '#F5F7FA' },
   header: { padding: 12 },
   title: { fontSize: 20, fontWeight: '700' },
   subtitle: { color: '#6B7280', marginTop: 6 },
@@ -370,9 +370,9 @@ const styles = StyleSheet.create({
   itemText: { fontSize: 16, fontWeight: '600' },
   itemTranslation: { color: '#374151', marginTop: 6 },
   metaRow: { flexDirection: 'row', marginTop: 8, flexWrap: 'wrap' },
-  metaBadge: { backgroundColor: '#EEF2FF', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999, marginRight: 8, marginBottom: 6 },
+  metaBadge: { backgroundColor: '#F3F4F6', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999, marginRight: 8, marginBottom: 6 },
   controls: { position: 'absolute', left: 0, right: 0, bottom: 56, flexDirection: 'row', justifyContent: 'center', gap: 12 },
   ctrlButton: { backgroundColor: '#FFFFFF', padding: 12, borderRadius: 12, borderWidth: 1, borderColor: '#E5E7EB', marginHorizontal: 8 },
-  settingBar: { position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: '#F8FAFC', paddingVertical: 8, borderTopWidth: 1, borderTopColor: '#E5E7EB' },
-  smallButton: { backgroundColor: '#E6EEF8', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 10, marginRight: 8 },
+  settingBar: { position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.7)', paddingVertical: 8, borderTopWidth: 1, borderTopColor: '#E5E7EB', backdropFilter: 'blur(20px)', shadowColor: '#000', shadowOffset: { width: 0, height: -1 }, shadowOpacity: 0.05, shadowRadius: 3 },
+  smallButton: { backgroundColor: '#FFF8E1', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 10, marginRight: 8 },
 });

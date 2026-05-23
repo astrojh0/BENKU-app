@@ -8,15 +8,16 @@ export async function sendMessage(
   targetLang: string,
   mode: QueryMode,
   model: ModelType,
+  nativeLanguage: string = '中文',
 ): Promise<SentenceResponse> {
   switch (model) {
     case 'deepseek':
-      return sendMessageToDeepSeek(userMessage, targetLang, mode);
+      return sendMessageToDeepSeek(userMessage, targetLang, mode, nativeLanguage);
     case 'openai':
-      return sendMessageToOpenAI(userMessage, targetLang, mode);
+      return sendMessageToOpenAI(userMessage, targetLang, mode, nativeLanguage);
     case 'gemini':
-      return sendMessageToGemini(userMessage, targetLang, mode);
+      return sendMessageToGemini(userMessage, targetLang, mode, nativeLanguage);
     default:
-      return sendMessageToDeepSeek(userMessage, targetLang, mode);
+      return sendMessageToDeepSeek(userMessage, targetLang, mode, nativeLanguage);
   }
 }

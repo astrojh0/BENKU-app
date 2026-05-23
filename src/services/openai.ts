@@ -1,10 +1,10 @@
 import { QueryMode, SentenceResponse } from './deepseek';
 
-function buildSystemPrompt(targetLang: string, mode: QueryMode): string {
+function buildSystemPrompt(targetLang: string, mode: QueryMode, nativeLanguage: string = '中文'): string {
   const langName = targetLang === 'ja' ? '日语' : targetLang === 'en' ? '英语' : targetLang === 'ko' ? '韩语' : targetLang === 'fr' ? '法语' : targetLang === 'de' ? '德语' : targetLang === 'es' ? '西班牙语' : '目标语言';
 
   if (mode === 'translate') {
-    return `你是一个专业的语言老师。用户会用母语问"xxx用${langName}怎么说"。你必须严格按照以下 Markdown 格式输出，不得省略任何章节（如果目标语言没有敬语概念，则写"敬语版：同口语版"）：
+    return `用户的母语是${nativeLanguage}。你是一个专业的语言老师。用户会用母语问"xxx用${langName}怎么说"。你必须严格按照以下 Markdown 格式输出，不得省略任何章节（如果目标语言没有敬语概念，则写"敬语版：同口语版"）：
 
 **口语版：**
 [句子]
@@ -76,12 +76,13 @@ export async function sendMessageToOpenAI(
   userMessage: string,
   targetLang: string,
   mode: QueryMode,
+  nativeLanguage: string = '中文',
 ): Promise<SentenceResponse> {
   if (!userMessage || !userMessage.trim()) {
     throw new Error('userMessage required');
   }
 
-  const systemPrompt = buildSystemPrompt(targetLang, mode);
+  const systemPrompt = buildSystemPrompt(targetLang, mode, nativeLanguage);
 
   const endpoint = isWeb ? '/api/openai-proxy' : '/api/openai';
 

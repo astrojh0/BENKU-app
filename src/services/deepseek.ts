@@ -26,11 +26,11 @@ export function getDeepSeekApiKey(): string {
   return apiKey;
 }
 
-function buildSystemPrompt(targetLang: string, mode: QueryMode = 'translate') {
+function buildSystemPrompt(targetLang: string, mode: QueryMode = 'translate', nativeLanguage: string = '中文') {
   const langName = targetLang === 'ja' ? '日语' : targetLang === 'en' ? '英语' : targetLang === 'ko' ? '韩语' : targetLang === 'fr' ? '法语' : targetLang === 'de' ? '德语' : targetLang === 'es' ? '西班牙语' : '目标语言';
 
   if (mode === 'translate') {
-    return `你是一个专业的语言老师。用户会用母语问"xxx用${langName}怎么说"。你必须严格按照以下 Markdown 格式输出，不得省略任何章节（如果目标语言没有敬语概念，则写"敬语版：同口语版"）：
+    return `用户的母语是${nativeLanguage}。你是一个专业的语言老师。用户会用母语问"xxx用${langName}怎么说"。你必须严格按照以下 Markdown 格式输出，不得省略任何章节（如果目标语言没有敬语概念，则写"敬语版：同口语版"）：
 
 **口语版：**
 [句子]
@@ -96,13 +96,13 @@ function buildSystemPrompt(targetLang: string, mode: QueryMode = 'translate') {
   return `你是${langName}学习助手。只回答与${langName}学习相关的问题（语法、词汇、发音、文化等）。如果用户问无关内容，请礼貌回答："对不起，我只帮助${langName}学习相关问题。" 请用清晰的 Markdown 格式输出，不要用代码块。`;
 }
 
-export async function sendMessageToDeepSeek(userMessage: string, targetLang = 'ja', mode: QueryMode = 'translate') {
+export async function sendMessageToDeepSeek(userMessage: string, targetLang = 'ja', mode: QueryMode = 'translate', nativeLanguage: string = '中文') {
   if (!userMessage || !userMessage.trim()) {
     throw new Error('userMessage required');
   }
 
   const apiKey = getDeepSeekApiKey();
-  const systemPrompt = buildSystemPrompt(targetLang, mode);
+  const systemPrompt = buildSystemPrompt(targetLang, mode, nativeLanguage);
 
   const payload = {
     model: 'deepseek-chat',

@@ -1,6 +1,6 @@
 import { syncLoadConversations, syncSaveConversation } from '../services/sync';
 
-const CONVERSATIONS_KEY = 'ocat_conversations';
+const CONVERSATIONS_KEY = 'benku_conversations';
 
 export interface ConversationRecord {
   id: string;

@@ -12,7 +12,7 @@ import {
     saveDocument
 } from './firebase';
 
-const MIGRATED_KEY = 'ocat_cloud_migrated';
+const MIGRATED_KEY = 'benku_cloud_migrated';
 
 let userId: string | null = null;
 let initialized = false;
@@ -43,7 +43,7 @@ export async function migrateLocalData(): Promise<void> {
   if (alreadyMigrated === uid) return;
 
   try {
-    const rawSentences = await AsyncStorage.getItem('ocat_sentences');
+    const rawSentences = await AsyncStorage.getItem('benku_sentences');
     if (rawSentences) {
       const sentences: Sentence[] = JSON.parse(rawSentences);
       for (const s of sentences) {
@@ -51,13 +51,13 @@ export async function migrateLocalData(): Promise<void> {
       }
     }
 
-    const rawFolders = await AsyncStorage.getItem('ocat_folders');
+    const rawFolders = await AsyncStorage.getItem('benku_folders');
     if (rawFolders) {
       const folders: string[] = JSON.parse(rawFolders);
       await saveDocument(uid, 'settings', 'folders', { folders });
     }
 
-    const rawConvs = await AsyncStorage.getItem('ocat_conversations');
+    const rawConvs = await AsyncStorage.getItem('benku_conversations');
     if (rawConvs) {
       const convs: ConversationRecord[] = JSON.parse(rawConvs);
       for (const c of convs) {
@@ -65,13 +65,13 @@ export async function migrateLocalData(): Promise<void> {
       }
     }
 
-    const rawSettings = await AsyncStorage.getItem('ocat_settings');
+    const rawSettings = await AsyncStorage.getItem('benku_settings');
     if (rawSettings) {
       const settings = JSON.parse(rawSettings);
       await saveDocument(uid, 'settings', 'preferences', settings);
     }
 
-    const rawDuration = await AsyncStorage.getItem('ocat_play_duration');
+    const rawDuration = await AsyncStorage.getItem('benku_play_duration');
     if (rawDuration) {
       await saveDocument(uid, 'settings', 'playDuration', { value: Number(rawDuration) });
     }
@@ -90,7 +90,7 @@ export async function syncLoadSentences(): Promise<Sentence[]> {
       const cloud = await getCollection<Sentence & { id: string }>(uid, 'sentences');
       if (cloud.length > 0) {
         const mapped = cloud.map((s) => ({ ...s, id: (s as any)._localId || s.id }));
-        await AsyncStorage.setItem('ocat_sentences', JSON.stringify(mapped));
+        await AsyncStorage.setItem('benku_sentences', JSON.stringify(mapped));
         return mapped;
       }
     } catch (e) {
@@ -98,12 +98,12 @@ export async function syncLoadSentences(): Promise<Sentence[]> {
     }
   }
 
-  const raw = await AsyncStorage.getItem('ocat_sentences');
+  const raw = await AsyncStorage.getItem('benku_sentences');
   return raw ? JSON.parse(raw) : [];
 }
 
 export async function syncSaveSentences(sentences: Sentence[]): Promise<void> {
-  await AsyncStorage.setItem('ocat_sentences', JSON.stringify(sentences));
+  await AsyncStorage.setItem('benku_sentences', JSON.stringify(sentences));
   const uid = getUid();
   if (uid) {
     try {
@@ -122,7 +122,7 @@ export async function syncLoadFolders(): Promise<string[]> {
     try {
       const doc = await getDocument<{ folders: string[] }>(uid, 'settings', 'folders');
       if (doc?.folders) {
-        await AsyncStorage.setItem('ocat_folders', JSON.stringify(doc.folders));
+        await AsyncStorage.setItem('benku_folders', JSON.stringify(doc.folders));
         return doc.folders;
       }
     } catch (e) {
@@ -130,12 +130,12 @@ export async function syncLoadFolders(): Promise<string[]> {
     }
   }
 
-  const raw = await AsyncStorage.getItem('ocat_folders');
+  const raw = await AsyncStorage.getItem('benku_folders');
   return raw ? JSON.parse(raw) : [];
 }
 
 export async function syncSaveFolders(folders: string[]): Promise<void> {
-  await AsyncStorage.setItem('ocat_folders', JSON.stringify(folders));
+  await AsyncStorage.setItem('benku_folders', JSON.stringify(folders));
   const uid = getUid();
   if (uid) {
     try {
@@ -152,7 +152,7 @@ export async function syncLoadConversations(): Promise<ConversationRecord[]> {
     try {
       const cloud = await getCollection<ConversationRecord & { id: string }>(uid, 'conversations');
       if (cloud.length > 0) {
-        await AsyncStorage.setItem('ocat_conversations', JSON.stringify(cloud));
+        await AsyncStorage.setItem('benku_conversations', JSON.stringify(cloud));
         return cloud;
       }
     } catch (e) {
@@ -160,16 +160,16 @@ export async function syncLoadConversations(): Promise<ConversationRecord[]> {
     }
   }
 
-  const raw = await AsyncStorage.getItem('ocat_conversations');
+  const raw = await AsyncStorage.getItem('benku_conversations');
   return raw ? JSON.parse(raw) : [];
 }
 
 export async function syncSaveConversation(record: ConversationRecord): Promise<void> {
-  const raw = await AsyncStorage.getItem('ocat_conversations');
+  const raw = await AsyncStorage.getItem('benku_conversations');
   const list: ConversationRecord[] = raw ? JSON.parse(raw) : [];
   list.unshift(record);
   const trimmed = list.slice(0, 200);
-  await AsyncStorage.setItem('ocat_conversations', JSON.stringify(trimmed));
+  await AsyncStorage.setItem('benku_conversations', JSON.stringify(trimmed));
 
   const uid = getUid();
   if (uid) {
@@ -187,7 +187,7 @@ export async function syncLoadSettings<T = Record<string, unknown>>(): Promise<T
     try {
       const doc = await getDocument<T>(uid, 'settings', 'preferences');
       if (doc) {
-        await AsyncStorage.setItem('ocat_settings', JSON.stringify(doc));
+        await AsyncStorage.setItem('benku_settings', JSON.stringify(doc));
         return doc;
       }
     } catch (e) {
@@ -195,12 +195,12 @@ export async function syncLoadSettings<T = Record<string, unknown>>(): Promise<T
     }
   }
 
-  const raw = await AsyncStorage.getItem('ocat_settings');
+  const raw = await AsyncStorage.getItem('benku_settings');
   return raw ? JSON.parse(raw) : null;
 }
 
 export async function syncSaveSettings(settings: Record<string, unknown>): Promise<void> {
-  await AsyncStorage.setItem('ocat_settings', JSON.stringify(settings));
+  await AsyncStorage.setItem('benku_settings', JSON.stringify(settings));
   const uid = getUid();
   if (uid) {
     try {
@@ -217,7 +217,7 @@ export async function syncLoadPlayDuration(): Promise<number> {
     try {
       const doc = await getDocument<{ value: number }>(uid, 'settings', 'playDuration');
       if (doc) {
-        await AsyncStorage.setItem('ocat_play_duration', String(doc.value));
+        await AsyncStorage.setItem('benku_play_duration', String(doc.value));
         return doc.value;
       }
     } catch (e) {
@@ -225,12 +225,12 @@ export async function syncLoadPlayDuration(): Promise<number> {
     }
   }
 
-  const raw = await AsyncStorage.getItem('ocat_play_duration');
+  const raw = await AsyncStorage.getItem('benku_play_duration');
   return raw ? Number(raw) : 0;
 }
 
 export async function syncSavePlayDuration(value: number): Promise<void> {
-  await AsyncStorage.setItem('ocat_play_duration', String(value));
+  await AsyncStorage.setItem('benku_play_duration', String(value));
   const uid = getUid();
   if (uid) {
     try {
@@ -247,7 +247,7 @@ export function syncListenSentences(callback: (data: Sentence[]) => void): () =>
 
   return listenCollection<Sentence & { id: string }>(uid, 'sentences', (cloud) => {
     const mapped = cloud.map((s) => ({ ...s, id: (s as any)._localId || s.id }));
-    AsyncStorage.setItem('ocat_sentences', JSON.stringify(mapped)).catch(() => {});
+    AsyncStorage.setItem('benku_sentences', JSON.stringify(mapped)).catch(() => {});
     callback(mapped);
   });
 }
@@ -257,7 +257,7 @@ export function syncListenConversations(callback: (data: ConversationRecord[]) =
   if (!uid) return () => {};
 
   return listenCollection<ConversationRecord>(uid, 'conversations', (cloud) => {
-    AsyncStorage.setItem('ocat_conversations', JSON.stringify(cloud)).catch(() => {});
+    AsyncStorage.setItem('benku_conversations', JSON.stringify(cloud)).catch(() => {});
     callback(cloud);
   });
 }
@@ -268,7 +268,7 @@ export function syncListenSettings(callback: (data: Record<string, unknown> | nu
 
   return listenDocument<Record<string, unknown>>(uid, 'settings', 'preferences', (doc) => {
     if (doc) {
-      AsyncStorage.setItem('ocat_settings', JSON.stringify(doc)).catch(() => {});
+      AsyncStorage.setItem('benku_settings', JSON.stringify(doc)).catch(() => {});
     }
     callback(doc);
   });

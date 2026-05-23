@@ -23,9 +23,9 @@ import {
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD6T-X7eMSKF6G85h58VEtKJISEQud0JOk',
-  authDomain: 'ocat-clone.firebaseapp.com',
-  projectId: 'ocat-clone',
-  storageBucket: 'ocat-clone.firebasestorage.app',
+  authDomain: 'benku-app.firebaseapp.com',
+  projectId: 'benku-app',
+  storageBucket: 'benku-app.firebasestorage.app',
   messagingSenderId: '120336049028',
   appId: '1:120336049028:web:9c912c1e4666fd065af3d1',
 };

@@ -28,7 +28,7 @@ export default function RootScreen() {
 
   useEffect(() => {
     (async () => {
-      const raw = await AsyncStorage.getItem('ocat_settings');
+      const raw = await AsyncStorage.getItem('benku_settings');
       if (raw) {
         try {
           const s = JSON.parse(raw);
@@ -40,7 +40,7 @@ export default function RootScreen() {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const raw = await AsyncStorage.getItem('ocat_settings');
+      const raw = await AsyncStorage.getItem('benku_settings');
       if (raw) {
         try {
           const s = JSON.parse(raw);

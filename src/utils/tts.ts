@@ -1,7 +1,8 @@
 import { Audio } from 'expo-av';
 
-let currentSound: Audio.Sound | null = null;
-let currentUtterance: SpeechSynthesisUtterance | null = null;
+type AudioSound = ReturnType<typeof Audio.Sound.create>[0];
+
+let currentSound: AudioSound | null = null;
 
 const isWeb = typeof window !== 'undefined';
 
@@ -14,7 +15,7 @@ const VOICE_MAP: Record<string, string> = {
   'es-ES': 'es-ES-ElviraNeural',
 };
 
-const WEB_SPEECH_LANG_MAP: Record<string, string> = {
+const LOCALE_MAP: Record<string, string> = {
   ja: 'ja-JP',
   en: 'en-US',
   ko: 'ko-KR',
@@ -27,76 +28,112 @@ export function getVoiceForLanguage(languageCode: string): string {
   return VOICE_MAP[languageCode] || 'ja-JP-NanamiNeural';
 }
 
-function getWebSpeechLang(languageCode?: string): string {
+function getLocale(languageCode?: string): string {
   if (!languageCode) return 'ja-JP';
   if (languageCode.includes('-')) return languageCode;
-  return WEB_SPEECH_LANG_MAP[languageCode] || 'ja-JP';
+  return LOCALE_MAP[languageCode] || 'ja-JP';
 }
 
-function findBestVoice(lang: string): SpeechSynthesisVoice | null {
-  if (!isWeb || typeof speechSynthesis === 'undefined') return null;
+let _speechReady = false;
 
-  const voices = speechSynthesis.getVoices();
-  if (voices.length === 0) return null;
+export function activateSpeechSynthesis(): void {
+  if (!isWeb || !window.speechSynthesis) return;
+  if (_speechReady) return;
 
-  const exactMatch = voices.find((v) => v.lang === lang);
-  if (exactMatch) return exactMatch;
-
-  const prefixMatch = voices.find((v) => v.lang.startsWith(lang.split('-')[0]));
-  if (prefixMatch) return prefixMatch;
-
-  return voices[0];
-}
-
-export async function speakWithWebSpeech(text: string, languageCode?: string): Promise<void> {
-  if (!text || !text.trim()) return;
-
-  if (!isWeb || typeof speechSynthesis === 'undefined') {
-    throw new Error('Web Speech API not available');
+  try {
+    const u = new SpeechSynthesisUtterance('');
+    u.volume = 0;
+    u.rate = 1;
+    window.speechSynthesis.speak(u);
+    _speechReady = true;
+    console.log('[TTS] speechSynthesis activated');
+  } catch (e) {
+    console.warn('[TTS] speechSynthesis activation failed:', e);
   }
+}
 
+if (isWeb && typeof document !== 'undefined') {
+  document.addEventListener('click', activateSpeechSynthesis, { once: true });
+  document.addEventListener('touchstart', activateSpeechSynthesis, { once: true });
+}
+
+export function getSpeechStatus(): {
+  supported: boolean;
+  speaking: boolean;
+  pending: boolean;
+  paused: boolean;
+  voiceCount: number;
+  active: boolean;
+} {
+  if (!isWeb || !window.speechSynthesis) {
+    return { supported: false, speaking: false, pending: false, paused: false, voiceCount: 0, active: false };
+  }
+  const synth = window.speechSynthesis;
+  return {
+    supported: true,
+    speaking: synth.speaking,
+    pending: synth.pending,
+    paused: synth.paused,
+    voiceCount: synth.getVoices().length,
+    active: _speechReady,
+  };
+}
+
+function speakWithWebSpeech(text: string, languageCode?: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    try {
-      speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(text.trim());
-      const lang = getWebSpeechLang(languageCode);
-      utterance.lang = lang;
-      utterance.rate = 0.9;
-      utterance.pitch = 1.0;
-
-      const voice = findBestVoice(lang);
-      if (voice) {
-        utterance.voice = voice;
-      }
-
-      currentUtterance = utterance;
-
-      utterance.onend = () => {
-        currentUtterance = null;
-        resolve();
-      };
-
-      utterance.onerror = (event) => {
-        currentUtterance = null;
-        if (event.error === 'canceled' || event.error === 'interrupted') {
-          resolve();
-        } else {
-          reject(new Error(`Web Speech error: ${event.error}`));
-        }
-      };
-
-      speechSynthesis.speak(utterance);
-    } catch (e) {
-      reject(e);
+    if (!isWeb || !window.speechSynthesis) {
+      const msg = 'Web Speech API 不可用（当前浏览器不支持 speechSynthesis）';
+      console.error('[TTS]', msg);
+      reject(new Error(msg));
+      return;
     }
+
+    const locale = getLocale(languageCode);
+    console.log('[TTS] speakWithWebSpeech:', { text: text.slice(0, 50), locale, status: getSpeechStatus() });
+
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text.trim());
+    utterance.lang = locale;
+    utterance.rate = 0.9;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    utterance.onstart = () => {
+      console.log('[TTS] utterance started:', text.slice(0, 50));
+    };
+
+    utterance.onend = () => {
+      console.log('[TTS] utterance ended');
+      resolve();
+    };
+
+    utterance.onerror = (event) => {
+      const errMsg = event.error || 'unknown';
+      console.error('[TTS] utterance error:', errMsg);
+      if (errMsg === 'not-allowed') {
+        reject(new Error('浏览器阻止了自动播放，请先点击页面任意位置激活语音功能'));
+      } else {
+        reject(new Error(`语音合成失败: ${errMsg}`));
+      }
+    };
+
+    utterance.onpause = () => {
+      console.log('[TTS] utterance paused');
+    };
+
+    utterance.onresume = () => {
+      console.log('[TTS] utterance resumed');
+    };
+
+    window.speechSynthesis.speak(utterance);
   });
 }
 
 export async function speakWithEdgeTTS(text: string, languageCode?: string): Promise<void> {
   if (!text || !text.trim()) return;
 
-  if (isWeb && typeof speechSynthesis !== 'undefined') {
+  if (isWeb) {
     return speakWithWebSpeech(text, languageCode);
   }
 
@@ -131,7 +168,7 @@ export async function speakWithEdgeTTS(text: string, languageCode?: string): Pro
     );
     currentSound = sound;
   } catch (e) {
-    console.error('Edge TTS error:', e);
+    console.error('[TTS] Edge TTS error:', e);
     throw e;
   }
 }
@@ -141,9 +178,8 @@ export async function speakWord(text: string, languageCode?: string): Promise<vo
 }
 
 export function stopSpeaking(): void {
-  if (isWeb && typeof speechSynthesis !== 'undefined') {
-    speechSynthesis.cancel();
-    currentUtterance = null;
+  if (isWeb && window.speechSynthesis) {
+    window.speechSynthesis.cancel();
     return;
   }
 

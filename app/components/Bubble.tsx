@@ -114,18 +114,23 @@ export default function Bubble({ text, context, learningLang }: BubbleProps) {
 
 const styles = StyleSheet.create({
   bubble: {
-    backgroundColor: '#F2F3F5',
-    borderRadius: 20,
+    backgroundColor: Colors.bubbleUser,
+    borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginVertical: 6,
     alignSelf: 'flex-start',
     maxWidth: '100%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 3,
   },
   bubbleText: {
     fontSize: 17,
     fontWeight: '500',
-    color: '#1C1C1E',
+    color: '#111827',
     lineHeight: 24,
   },
   overlay: {

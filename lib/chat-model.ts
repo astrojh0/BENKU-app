@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const SENTENCES_STORAGE_KEY = 'ocat_sentences';
+export const SENTENCES_STORAGE_KEY = 'benku_sentences';
 
 export type Sentence = {
   id: string;
