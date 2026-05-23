@@ -2,9 +2,6 @@
   command = "npx expo export --platform web"
   publish = "dist"
 
-[functions]
-  directory = "functions"
-
 [[redirects]]
   from = "/api/openai-proxy"
   to = "/.netlify/functions/openai-proxy"
