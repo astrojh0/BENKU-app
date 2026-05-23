@@ -123,39 +123,47 @@ export async function sendMessageToDeepSeek(userMessage: string, targetLang = 'j
     authHeader: `Bearer ${apiKey.slice(0, 10)}...`,
   });
 
-  const res = await fetch(DEEPSEEK_API_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-  console.log('[DeepSeek] Response status:', res.status);
-  console.log('[DeepSeek] Response ok:', res.ok);
+  try {
+    const res = await fetch(DEEPSEEK_API_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
 
-  if (!res.ok) {
-    const text = await res.text();
-    console.error('[DeepSeek] API error response:', text);
-    throw new Error(`DeepSeek API error ${res.status}: ${text}`);
+    console.log('[DeepSeek] Response status:', res.status);
+    console.log('[DeepSeek] Response ok:', res.ok);
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('[DeepSeek] API error response:', text);
+      throw new Error(`DeepSeek API error ${res.status}: ${text}`);
+    }
+
+    const data = await res.json().catch((e) => {
+      console.error('[DeepSeek] JSON parse error:', e);
+      throw new Error('Failed to parse DeepSeek response JSON: ' + String(e));
+    });
+
+    console.log('[DeepSeek] Raw response data:', JSON.stringify(data).slice(0, 500));
+
+    const rawContent = (data?.choices?.[0]?.message?.content) || (data?.output_text) || '';
+
+    const out: SentenceResponse = {
+      content: String(rawContent).trim(),
+      raw: data,
+    };
+
+    console.log('[DeepSeek] Response content length:', out.content.length);
+
+    return out;
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  const data = await res.json().catch((e) => {
-    console.error('[DeepSeek] JSON parse error:', e);
-    throw new Error('Failed to parse DeepSeek response JSON: ' + String(e));
-  });
-
-  console.log('[DeepSeek] Raw response data:', JSON.stringify(data).slice(0, 500));
-
-  const rawContent = (data?.choices?.[0]?.message?.content) || (data?.output_text) || '';
-
-  const out: SentenceResponse = {
-    content: String(rawContent).trim(),
-    raw: data,
-  };
-
-  console.log('[DeepSeek] Response content length:', out.content.length);
-
-  return out;
 }

@@ -93,37 +93,45 @@ export async function sendMessageToGemini(
     userMessage: userMessage.trim().slice(0, 100),
   });
 
-  const res = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      system_instruction: { parts: [{ text: systemPrompt }] },
-      contents: [{ parts: [{ text: userMessage.trim() }] }],
-      generationConfig: { temperature: 0.6, maxOutputTokens: 2000 },
-    }),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-  console.log('[Gemini] Response status:', res.status);
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ parts: [{ text: userMessage.trim() }] }],
+        generationConfig: { temperature: 0.6, maxOutputTokens: 2000 },
+      }),
+      signal: controller.signal,
+    });
 
-  if (!res.ok) {
-    const text = await res.text();
-    console.error('[Gemini] API error response:', text);
-    throw new Error(`Gemini API error ${res.status}: ${text}`);
+    console.log('[Gemini] Response status:', res.status);
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.warn('[Gemini] API error response:', text);
+      throw new Error(`Gemini API error ${res.status}: ${text}`);
+    }
+
+    const data = await res.json().catch((e) => {
+      console.warn('[Gemini] JSON parse error:', e);
+      throw new Error('Failed to parse Gemini response JSON: ' + String(e));
+    });
+
+    if (data.error) {
+      console.warn('[Gemini] API returned error:', data.error);
+      throw new Error(typeof data.error === 'string' ? data.error : JSON.stringify(data.error));
+    }
+
+    const content = data.content || '';
+
+    console.log('[Gemini] Response content length:', content.length);
+
+    return { content: String(content).trim(), raw: data };
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  const data = await res.json().catch((e) => {
-    console.error('[Gemini] JSON parse error:', e);
-    throw new Error('Failed to parse Gemini response JSON: ' + String(e));
-  });
-
-  if (data.error) {
-    console.error('[Gemini] API returned error:', data.error);
-    throw new Error(typeof data.error === 'string' ? data.error : JSON.stringify(data.error));
-  }
-
-  const content = data.content || '';
-
-  console.log('[Gemini] Response content length:', content.length);
-
-  return { content: String(content).trim(), raw: data };
 }
