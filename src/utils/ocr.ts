@@ -84,42 +84,50 @@ export async function recognizeText(
 
     console.log('[OCR] 发送请求到代理');
 
-    // 调用 Netlify 函数（直接访问函数路径）
-    const response = await fetch('/api/google-vision', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ imageBase64: base64Image }),
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-    onProgress?.(70);
+    try {
+      // 调用 Netlify 函数（直接访问函数路径）
+      const response = await fetch('/api/google-vision', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageBase64: base64Image }),
+        signal: controller.signal,
+      });
 
-    console.log('[OCR] 代理响应状态:', response.status);
+      onProgress?.(70);
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('[OCR] 代理响应错误:', errorData);
-      throw new Error(errorData.error || 'OCR 识别失败');
+      console.log('[OCR] 代理响应状态:', response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.warn('[OCR] 代理响应错误:', errorData);
+        throw new Error(errorData.error || 'OCR 识别失败');
+      }
+
+      const data = await response.json();
+
+      console.log('[OCR] 代理返回数据:', JSON.stringify(data).substring(0, 200));
+
+      onProgress?.(100);
+
+      const text = (data.text || '').trim();
+      
+      if (!text) {
+        throw new Error('未识别到文字，请确保图片包含清晰的文字');
+      }
+
+      const language = detectLanguage(text);
+
+      return { text, language };
+    } finally {
+      clearTimeout(timeoutId);
     }
-
-    const data = await response.json();
-
-    console.log('[OCR] 代理返回数据:', JSON.stringify(data).substring(0, 200));
-
-    onProgress?.(100);
-
-    const text = (data.text || '').trim();
-    
-    if (!text) {
-      throw new Error('未识别到文字，请确保图片包含清晰的文字');
-    }
-
-    const language = detectLanguage(text);
-
-    return { text, language };
   } catch (error) {
-    console.error('OCR识别失败:', error);
+    console.warn('OCR识别失败:', error);
     if (error instanceof Error) {
       throw error;
     }

@@ -56,6 +56,7 @@ interface ChatMessage {
   content?: string;
   saved?: boolean;
   createdAt: number;
+  conversationId?: string;
 }
 
 export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () => void }) {
@@ -73,6 +74,7 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
   const [quickLangBtnLayout, setQuickLangBtnLayout] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [ocrLoading, setOcrLoading] = useState(false);
   const [ocrProgress, setOcrProgress] = useState(0);
+  const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
   const glowAnim = useRef(new Animated.Value(0.3)).current;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
@@ -128,6 +130,7 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
           role: 'user',
           text: c.userInput || '',
           createdAt: c.createdAt || Date.now(),
+          conversationId: c.sourceConversationId || c.id,
         });
         msgs.push({
           id: `${c.id}_ai`,
@@ -157,29 +160,47 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
 
   const loadConversationHistory = useCallback(async (conversationId: string) => {
     const convs = await getAllConversations();
-    const conv = convs.find((c) => (c.sourceConversationId || c.id) === conversationId);
-    if (!conv) return;
-
-    setActiveConversationId(conversationId);
-
-    const aiResp = conv.aiResponse || { sentence: '', content: '' };
-    const msgs: ChatMessage[] = [
-      {
-        id: `${conv.id}_user`,
+    
+    // First, load all messages into the list (since it's a single conversation history currently)
+    const msgs: ChatMessage[] = [];
+    for (const c of convs.slice(0, 20).reverse()) {
+      const aiResp = c.aiResponse || { sentence: '', content: '' };
+      msgs.push({
+        id: `${c.id}_user`,
         role: 'user',
-        text: conv.userInput || '',
-        createdAt: conv.createdAt || Date.now(),
-      },
-      {
-        id: `${conv.id}_ai`,
+        text: c.userInput || '',
+        createdAt: c.createdAt || Date.now(),
+        conversationId: c.sourceConversationId || c.id,
+      });
+      msgs.push({
+        id: `${c.id}_ai`,
         role: 'ai',
         text: aiResp.sentence || aiResp.content || '',
         content: aiResp.content || aiResp.sentence || '',
-        createdAt: conv.createdAt || Date.now(),
-      },
-    ];
+        createdAt: c.createdAt || Date.now(),
+      });
+    }
     setMessages(msgs);
-    setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 100);
+    
+    // Now find the index of the selected conversation's user message
+    const targetIndex = msgs.findIndex((msg) => msg.conversationId === conversationId && msg.role === 'user');
+    if (targetIndex >= 0) {
+      // Scroll to the target message
+      setTimeout(() => {
+        listRef.current?.scrollToIndex({
+          index: targetIndex,
+          animated: true,
+          viewPosition: 0.5, // Center the message
+        });
+      }, 100);
+      
+      // Highlight the message
+      setHighlightedMessageId(msgs[targetIndex].id);
+      // Clear highlight after 1 second
+      setTimeout(() => {
+        setHighlightedMessageId(null);
+      }, 1000);
+    }
   }, []);
 
   useEffect(() => {
@@ -399,9 +420,14 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
   }, [handleSpeakWord, handleSaveSentence]);
 
   const renderMessage = useCallback(({ item }: { item: ChatMessage }) => {
+    const isHighlighted = item.id === highlightedMessageId;
+    
     if (item.role === 'user') {
       return (
-        <View style={styles.userBubble}>
+        <View style={[
+          styles.userBubble,
+          isHighlighted && { backgroundColor: Colors.accent + '33' } // 33 is 20% opacity in hex
+        ]}>
           <Text style={styles.userText}>{item.text}</Text>
         </View>
       );
@@ -411,7 +437,10 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
     const blocks = parseAIResponse(rawContent);
 
     return (
-      <View style={styles.aiCard}>
+      <View style={[
+        styles.aiCard,
+        isHighlighted && { backgroundColor: Colors.accent + '22' }
+      ]}>
         {blocks.map((block, idx) => {
           if (block.type === 'heading') {
             const headingText = block.text.replace(/^\*\*/, '').replace(/\*\*\s*$/, '');
@@ -462,7 +491,7 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
         })}
       </View>
     );
-  }, [learningLanguage, ParseItemRow]);
+  }, [learningLanguage, ParseItemRow, highlightedMessageId]);
 
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, 20) }]}>

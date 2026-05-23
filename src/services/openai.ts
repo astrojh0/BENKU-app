@@ -93,40 +93,48 @@ export async function sendMessageToOpenAI(
     userMessage: userMessage.trim().slice(0, 100),
   });
 
-  const res = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userMessage.trim() },
-      ],
-      temperature: 0.6,
-      max_tokens: 2000,
-    }),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-  console.log('[OpenAI] Response status:', res.status);
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage.trim() },
+        ],
+        temperature: 0.6,
+        max_tokens: 2000,
+      }),
+      signal: controller.signal,
+    });
 
-  if (!res.ok) {
-    const text = await res.text();
-    console.error('[OpenAI] API error response:', text);
-    throw new Error(`OpenAI API error ${res.status}: ${text}`);
+    console.log('[OpenAI] Response status:', res.status);
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.warn('[OpenAI] API error response:', text);
+      throw new Error(`OpenAI API error ${res.status}: ${text}`);
+    }
+
+    const data = await res.json().catch((e) => {
+      console.warn('[OpenAI] JSON parse error:', e);
+      throw new Error('Failed to parse OpenAI response JSON: ' + String(e));
+    });
+
+    if (data.error) {
+      console.warn('[OpenAI] API returned error:', data.error);
+      throw new Error(typeof data.error === 'string' ? data.error : JSON.stringify(data.error));
+    }
+
+    const content = data.content || '';
+
+    console.log('[OpenAI] Response content length:', content.length);
+
+    return { content: String(content).trim(), raw: data };
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  const data = await res.json().catch((e) => {
-    console.error('[OpenAI] JSON parse error:', e);
-    throw new Error('Failed to parse OpenAI response JSON: ' + String(e));
-  });
-
-  if (data.error) {
-    console.error('[OpenAI] API returned error:', data.error);
-    throw new Error(typeof data.error === 'string' ? data.error : JSON.stringify(data.error));
-  }
-
-  const content = data.content || '';
-
-  console.log('[OpenAI] Response content length:', content.length);
-
-  return { content: String(content).trim(), raw: data };
 }
