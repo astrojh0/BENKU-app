@@ -1,8 +1,5 @@
 {
   "buildCommand": "npx expo export --platform web",
   "outputDirectory": "dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-  "functions": {
-    "api/*.js": { "runtime": "nodejs18.x" }
-  }
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
