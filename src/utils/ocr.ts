@@ -84,8 +84,8 @@ export async function recognizeText(
 
     console.log('[OCR] 发送请求到代理');
 
-    // 调用 Netlify 函数
-    const response = await fetch('/api/google-vision', {
+    // 调用 Netlify 函数（直接访问函数路径）
+    const response = await fetch('/.netlify/functions/google-vision', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
