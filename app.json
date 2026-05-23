@@ -4,7 +4,7 @@
     "slug": "benku-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/icon-1024.png",
     "scheme": "benkuapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
