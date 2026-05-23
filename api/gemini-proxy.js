@@ -16,21 +16,30 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'Missing contents in request body' });
   }
 
+  // 超时控制 - 15秒
+  const TIMEOUT_MS = 15000;
+  const timeout = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error('Request timeout')), TIMEOUT_MS)
+  );
+
   try {
     console.log('[gemini-proxy] 收到请求');
 
-    const upstream = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: system_instruction,
-          contents: contents,
-          generationConfig: generationConfig || { temperature: 0.6, maxOutputTokens: 2000 },
-        }),
-      },
-    );
+    const upstream = await Promise.race([
+      fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            system_instruction: system_instruction,
+            contents: contents,
+            generationConfig: generationConfig || { temperature: 0.6, maxOutputTokens: 2000 },
+          }),
+        }
+      ),
+      timeout
+    ]);
 
     if (!upstream.ok) {
       const errText = await upstream.text();
@@ -45,7 +54,10 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({ content: String(content).trim() });
   } catch (e) {
-    console.error('[gemini-proxy] Error:', e);
+    console.error('[gemini-proxy] Error:', e.message);
+    if (e.message === 'Request timeout') {
+      return res.status(504).json({ error: 'Request timeout. Please check your network connection.' });
+    }
     return res.status(500).json({ error: 'Gemini request failed: ' + e.message });
   }
 };

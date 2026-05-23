@@ -24,36 +24,45 @@ module.exports = async (req, res) => {
 
     console.log('[vercel] 正在调用 Google Vision API, API Key 前几位:', apiKey.slice(0, 6));
 
-    const response = await fetch(
-      `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          requests: [
-            {
-              image: {
-                content: imageBase64,
-              },
-              features: [
-                {
-                  type: 'DOCUMENT_TEXT_DETECTION',
-                },
-                {
-                  type: 'TEXT_DETECTION',
-                },
-              ],
-            },
-          ],
-        }),
-      }
+    // 超时控制 - 15秒
+    const TIMEOUT_MS = 15000;
+    const timeout = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Request timeout')), TIMEOUT_MS)
     );
 
-    console.log('[vercel] Google API 响应状态:', response.status);
+    const upstream = await Promise.race([
+      fetch(
+        `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            requests: [
+              {
+                image: {
+                  content: imageBase64,
+                },
+                features: [
+                  {
+                    type: 'DOCUMENT_TEXT_DETECTION',
+                  },
+                  {
+                    type: 'TEXT_DETECTION',
+                  },
+                ],
+              },
+            ],
+          }),
+        }
+      ),
+      timeout
+    ]);
 
-    const data = await response.json();
+    console.log('[vercel] Google API 响应状态:', upstream.status);
+
+    const data = await upstream.json();
 
     if (data.error) {
       console.error('[vercel] Google API 错误:', JSON.stringify(data.error));
@@ -67,7 +76,10 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({ text });
   } catch (error) {
-    console.error('[vercel] 函数错误:', error);
-    return res.status(500).json({ error: 'OCR processing failed' });
+    console.error('[vercel] 函数错误:', error.message);
+    if (error.message === 'Request timeout') {
+      return res.status(504).json({ error: 'OCR request timeout. Please check your network connection.' });
+    }
+    return res.status(500).json({ error: 'OCR processing failed: ' + error.message });
   }
 };

@@ -16,22 +16,31 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'Missing messages in request body' });
   }
 
+  // 超时控制 - 15秒
+  const TIMEOUT_MS = 15000;
+  const timeout = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error('Request timeout')), TIMEOUT_MS)
+  );
+
   try {
     console.log('[openai-proxy] 收到请求');
 
-    const upstream = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: messages,
-        temperature: temperature ?? 0.6,
-        max_tokens: max_tokens ?? 2000,
+    const upstream = await Promise.race([
+      fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: messages,
+          temperature: temperature ?? 0.6,
+          max_tokens: max_tokens ?? 2000,
+        }),
       }),
-    });
+      timeout
+    ]);
 
     if (!upstream.ok) {
       const errText = await upstream.text();
@@ -46,7 +55,10 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({ content: String(content).trim() });
   } catch (e) {
-    console.error('[openai-proxy] Error:', e);
+    console.error('[openai-proxy] Error:', e.message);
+    if (e.message === 'Request timeout') {
+      return res.status(504).json({ error: 'Request timeout. Please check your network connection.' });
+    }
     return res.status(500).json({ error: 'OpenAI request failed: ' + e.message });
   }
 };
