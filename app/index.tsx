@@ -1,23 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-    Dimensions,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
-    ScrollView,
-    StyleSheet,
-    View,
-    Pressable,
-    Text,
+  Dimensions,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
 import { Colors } from '../src/theme';
 import ChatScreen from './screens/ChatScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 import PlayerScreen from './screens/PlayerScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import { GlassColors, GlassSpacing, GlassRadius } from '../src/theme/advanced-glassmorphism';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -29,7 +25,6 @@ export default function RootScreen() {
   const [showPlayer, setShowPlayer] = useState(false);
   const [playerFolder, setPlayerFolder] = useState<string | null>(null);
   const [immersiveMode, setImmersiveMode] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -87,18 +82,6 @@ export default function RootScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <Pressable
-        style={[
-          styles.previewButton,
-          { 
-            top: insets.top + 12,
-            right: 16,
-          }
-        ]}
-        onPress={() => router.push('/glass-preview')}>
-        <Text style={styles.previewButtonText}>✨ 预览毛玻璃设计</Text>
-      </Pressable>
-      
       <ScrollView
         ref={scrollRef}
         horizontal
@@ -142,22 +125,4 @@ const styles = StyleSheet.create({
   },
   dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.dotInactive },
   dotActive: { backgroundColor: Colors.dotActive, width: 18 },
-  previewButton: {
-    position: 'absolute',
-    backgroundColor: '#6366f1',
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    zIndex: 1000,
-    shadowColor: '#6366f1',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 8,
-  },
-  previewButtonText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#ffffff',
-  },
 });
