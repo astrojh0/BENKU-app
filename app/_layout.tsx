@@ -31,6 +31,7 @@ function RootLayoutContent() {
     <>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="glass-preview" />
       </Stack>
       <StatusBar style="light" />
       <NativeLanguageModal

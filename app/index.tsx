@@ -7,13 +7,17 @@ import {
     ScrollView,
     StyleSheet,
     View,
+    Pressable,
+    Text,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { Colors } from '../src/theme';
 import ChatScreen from './screens/ChatScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 import PlayerScreen from './screens/PlayerScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import { GlassColors, GlassSpacing, GlassRadius } from '../src/theme/advanced-glassmorphism';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -25,6 +29,7 @@ export default function RootScreen() {
   const [showPlayer, setShowPlayer] = useState(false);
   const [playerFolder, setPlayerFolder] = useState<string | null>(null);
   const [immersiveMode, setImmersiveMode] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -82,6 +87,12 @@ export default function RootScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
+      <Pressable
+        style={styles.previewButton}
+        onPress={() => router.push('/glass-preview')}>
+        <Text style={styles.previewButtonText}>✨ 预览毛玻璃设计</Text>
+      </Pressable>
+      
       <ScrollView
         ref={scrollRef}
         horizontal
@@ -125,4 +136,26 @@ const styles = StyleSheet.create({
   },
   dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.dotInactive },
   dotActive: { backgroundColor: Colors.dotActive, width: 18 },
+  previewButton: {
+    position: 'absolute',
+    top: insets.top + 70,
+    right: 16,
+    backgroundColor: GlassColors.glassPrimary,
+    borderWidth: 1,
+    borderColor: GlassColors.glassBorder,
+    borderRadius: GlassRadius.md,
+    paddingVertical: GlassSpacing.sm,
+    paddingHorizontal: GlassSpacing.md,
+    zIndex: 1000,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  previewButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: GlassColors.textPrimary,
+  },
 });
