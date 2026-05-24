@@ -15,34 +15,49 @@ interface ImageCropperProps {
   onCrop: (result: CropResult) => void;
 }
 
-export const getCroppedImg = (imageSrc: string, crop: any): Promise<Blob> => {
-  const image = new window.Image();
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-
+export const getCroppedImg = async (
+  imageSrc: string,
+  pixelCrop: { x: number; y: number; width: number; height: number },
+): Promise<Blob> => {
   return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.crossOrigin = 'anonymous';
     image.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Canvas context not found'));
+        return;
+      }
+      
       const scaleX = image.naturalWidth / image.width;
       const scaleY = image.naturalHeight / image.height;
-      canvas.width = crop.width;
-      canvas.height = crop.height;
-      ctx?.drawImage(
+      const cropWidth = pixelCrop.width * scaleX;
+      const cropHeight = pixelCrop.height * scaleY;
+      const cropX = pixelCrop.x * scaleX;
+      const cropY = pixelCrop.y * scaleY;
+
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
+
+      ctx.drawImage(
         image,
-        crop.x * scaleX,
-        crop.y * scaleY,
-        crop.width * scaleX,
-        crop.height * scaleY,
+        cropX,
+        cropY,
+        cropWidth,
+        cropHeight,
         0,
         0,
-        crop.width,
-        crop.height
+        cropWidth,
+        cropHeight
       );
+
       canvas.toBlob((blob) => {
         if (blob) resolve(blob);
         else reject(new Error('Canvas is empty'));
       }, 'image/jpeg', 0.95);
     };
-    image.onerror = (error: any) => reject(error);
+    image.onerror = () => reject(new Error('Failed to load image'));
     image.src = imageSrc;
   });
 };
