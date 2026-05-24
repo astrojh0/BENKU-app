@@ -1,209 +1,245 @@
 export const Colors = {
   // Base
-  bg: '#ffffff',
+  bg: '#fafafa',
   card: '#ffffff',
   cardAccent: '#ffffff',
 
-  // Primary (near black)
-  accent: '#030213',
-  accentPressed: '#1a1a2e',
-  accentBorder: '#030213',
+  // Primary (softer dark with subtle warmth)
+  accent: '#1a1a1a',
+  accentPressed: '#333333',
+  accentBorder: '#e5e5e5',
 
   // Text
-  textPrimary: '#030213',
-  textSecondary: '#717182',
-  textMuted: '#717182',
-  textFurigana: '#030213',
+  textPrimary: '#1a1a1a',
+  textSecondary: '#6b6b6b',
+  textMuted: '#9b9b9b',
+  textFurigana: '#666666',
 
-  // Dividers & Borders
-  divider: 'rgba(0, 0, 0, 0.1)',
-  border: 'rgba(0, 0, 0, 0.1)',
+  // Dividers & Borders - softer
+  divider: 'rgba(0, 0, 0, 0.06)',
+  border: 'rgba(0, 0, 0, 0.08)',
 
   // Input
-  inputBg: '#f3f3f5',
-  inputPlaceholder: '#717182',
+  inputBg: '#f5f5f5',
+  inputPlaceholder: '#9b9b9b',
 
   // Header
   headerBg: '#ffffff',
-  headerBorder: 'rgba(0, 0, 0, 0.1)',
-  headerTitle: '#030213',
-  headerIcon: '#030213',
+  headerBorder: 'rgba(0, 0, 0, 0.06)',
+  headerTitle: '#1a1a1a',
+  headerIcon: '#1a1a1a',
 
-  // Bubbles
-  bubbleUser: '#f3f3f5',
-  bubbleUserText: '#030213',
+  // Bubbles - enhanced depth
+  bubbleUser: '#1a1a1a',
+  bubbleUserText: '#ffffff',
   bubbleAi: '#ffffff',
-  bubbleAiText: '#030213',
+  bubbleAiText: '#1a1a1a',
 
   // Quick buttons
-  quickBtnBg: '#f3f3f5',
-  quickBtnActiveBg: '#030213',
-  quickBtnText: '#717182',
+  quickBtnBg: '#f0f0f0',
+  quickBtnActiveBg: '#1a1a1a',
+  quickBtnText: '#6b6b6b',
   quickBtnActiveText: '#ffffff',
 
   // Send button
-  sendBtn: '#030213',
-  sendBtnDisabled: '#cbced4',
+  sendBtn: '#1a1a1a',
+  sendBtnDisabled: '#d4d4d4',
 
   // Overlay & Modal
-  overlay: 'rgba(0, 0, 0, 0.4)',
+  overlay: 'rgba(0, 0, 0, 0.5)',
   modalBg: '#ffffff',
-  modalTitle: '#030213',
-  modalInputBg: '#f3f3f5',
-  modalInputBorder: 'rgba(0, 0, 0, 0.1)',
-  modalInputText: '#030213',
-  modalCancelBg: '#f3f3f5',
-  modalCancelText: '#717182',
-  modalConfirmBg: '#030213',
+  modalTitle: '#1a1a1a',
+  modalInputBg: '#f5f5f5',
+  modalInputBorder: 'rgba(0, 0, 0, 0.08)',
+  modalInputText: '#1a1a1a',
+  modalCancelBg: '#f0f0f0',
+  modalCancelText: '#6b6b6b',
+  modalConfirmBg: '#1a1a1a',
   modalConfirmText: '#ffffff',
 
   // Chips
-  chipBg: '#f3f3f5',
-  chipActiveBg: '#030213',
-  chipText: '#717182',
+  chipBg: '#f0f0f0',
+  chipActiveBg: '#1a1a1a',
+  chipText: '#6b6b6b',
   chipActiveText: '#ffffff',
 
   // Danger
   dangerBg: '#fef2f2',
-  dangerText: '#d4183d',
+  dangerText: '#dc2626',
 
   // Links
-  link: '#030213',
+  link: '#1a1a1a',
 
   // Stars
-  star: '#030213',
-  masteredStar: '#030213',
+  star: '#1a1a1a',
+  masteredStar: '#fbbf24',
 
   // Player
-  playerFab: '#030213',
+  playerFab: '#1a1a1a',
   playerFabText: '#ffffff',
   nowPlayingBg: '#ffffff',
-  nowPlayingBorder: 'rgba(0, 0, 0, 0.1)',
+  nowPlayingBorder: 'rgba(0, 0, 0, 0.06)',
 
   // List items
-  itemActiveBg: '#f3f3f5',
-  itemActiveBorder: '#030213',
-  itemText: '#030213',
-  itemTranslation: '#717182',
-  itemDate: '#717182',
-  itemPressed: '#f3f3f5',
-  itemBorder: 'rgba(0, 0, 0, 0.1)',
+  itemActiveBg: '#f5f5f5',
+  itemActiveBorder: '#1a1a1a',
+  itemText: '#1a1a1a',
+  itemTranslation: '#6b6b6b',
+  itemDate: '#9b9b9b',
+  itemPressed: '#f0f0f0',
+  itemBorder: 'rgba(0, 0, 0, 0.06)',
 
   // Switch
-  switchTrack: '#cbced4',
+  switchTrack: '#e0e0e0',
   switchThumb: '#ffffff',
 
   // Stepper
-  stepperBg: '#f3f3f5',
-  stepperText: '#030213',
+  stepperBg: '#f0f0f0',
+  stepperText: '#1a1a1a',
 
   // Clear button
   clearBtnBg: '#fef2f2',
-  clearBtnText: '#d4183d',
+  clearBtnText: '#dc2626',
 
   // About
-  aboutText: '#717182',
+  aboutText: '#6b6b6b',
 
   // Dots
-  dotInactive: '#cbced4',
-  dotActive: '#030213',
+  dotInactive: '#d4d4d4',
+  dotActive: '#1a1a1a',
 
   // Parse
-  parseItemBorder: 'rgba(0, 0, 0, 0.1)',
-  parseActionBorder: 'rgba(0, 0, 0, 0.1)',
-  parseActionText: '#717182',
+  parseItemBorder: 'rgba(0, 0, 0, 0.06)',
+  parseActionBorder: 'rgba(0, 0, 0, 0.06)',
+  parseActionText: '#6b6b6b',
 
   // Menu
   menuBg: '#ffffff',
-  menuBorder: 'rgba(0, 0, 0, 0.1)',
-  menuItemText: '#030213',
-  menuDivider: 'rgba(0, 0, 0, 0.1)',
+  menuBorder: 'rgba(0, 0, 0, 0.08)',
+  menuItemText: '#1a1a1a',
+  menuDivider: 'rgba(0, 0, 0, 0.06)',
 
   // Selector
   selectorBg: '#ffffff',
-  selectorText: '#030213',
-  selectorArrow: '#717182',
+  selectorText: '#1a1a1a',
+  selectorArrow: '#6b6b6b',
 
   // Fallback icon
-  fallbackIconBg: '#f3f3f5',
-  fallbackIconText: '#030213',
+  fallbackIconBg: '#f0f0f0',
+  fallbackIconText: '#1a1a1a',
 
   // Checkmark
-  checkmark: '#030213',
+  checkmark: '#1a1a1a',
 
   // History
-  historyTitle: '#030213',
-  historyItemText: '#030213',
-  historyItemDate: '#717182',
-  historySeparator: 'rgba(0, 0, 0, 0.1)',
-  historyEmpty: '#717182',
+  historyTitle: '#1a1a1a',
+  historyItemText: '#1a1a1a',
+  historyItemDate: '#9b9b9b',
+  historySeparator: 'rgba(0, 0, 0, 0.06)',
+  historyEmpty: '#9b9b9b',
 
   // Sheet
   sheetBg: '#ffffff',
-  sheetTitle: '#030213',
-  sheetDivider: 'rgba(0, 0, 0, 0.1)',
-  sheetLabel: '#717182',
-  sheetCancel: '#717182',
+  sheetTitle: '#1a1a1a',
+  sheetDivider: 'rgba(0, 0, 0, 0.06)',
+  sheetLabel: '#6b6b6b',
+  sheetCancel: '#6b6b6b',
 
   // Folders
-  folderChipBg: '#f3f3f5',
-  folderChipActiveBg: '#030213',
-  folderChipText: '#717182',
+  folderChipBg: '#f0f0f0',
+  folderChipActiveBg: '#1a1a1a',
+  folderChipText: '#6b6b6b',
   folderChipActiveText: '#ffffff',
 
   // Sort button
-  sortBtnBg: '#f3f3f5',
-  sortBtnText: '#717182',
+  sortBtnBg: '#f0f0f0',
+  sortBtnText: '#6b6b6b',
 
   // Add folder
-  addFolderBg: '#f3f3f5',
-  addFolderText: '#030213',
+  addFolderBg: '#f0f0f0',
+  addFolderText: '#1a1a1a',
 
   // Text input
   textInputBg: '#ffffff',
-  textInputBorder: 'rgba(0, 0, 0, 0.1)',
-  textInputText: '#030213',
+  textInputBorder: 'rgba(0, 0, 0, 0.08)',
+  textInputText: '#1a1a1a',
 
   // Link card
   linkCardBg: '#ffffff',
-  linkCardBorder: 'rgba(0, 0, 0, 0.1)',
-  linkText: '#030213',
+  linkCardBorder: 'rgba(0, 0, 0, 0.08)',
+  linkText: '#1a1a1a',
 
   // About
-  aboutTitle: '#030213',
+  aboutTitle: '#1a1a1a',
 
   // Progress
-  progressText: '#717182',
+  progressText: '#6b6b6b',
 
   // Now playing
-  nowSentence: '#030213',
-  nowKana: '#717182',
-  nowTranslation: '#717182',
-  passInfo: '#717182',
+  nowSentence: '#1a1a1a',
+  nowKana: '#6b6b6b',
+  nowTranslation: '#6b6b6b',
+  passInfo: '#6b6b6b',
 
   // Empty
-  emptyText: '#717182',
+  emptyText: '#9b9b9b',
 
   // Control buttons
-  ctrlBtnBg: '#f3f3f5',
-  playBtnBg: '#030213',
+  ctrlBtnBg: '#f0f0f0',
+  playBtnBg: '#1a1a1a',
   playBtnText: '#ffffff',
 
   // Section title
-  sectionTitle: '#717182',
+  sectionTitle: '#6b6b6b',
 
   // Row
-  rowLabel: '#717182',
-  rowValue: '#717182',
+  rowLabel: '#6b6b6b',
+  rowValue: '#6b6b6b',
 
   // Close
-  closeText: '#717182',
+  closeText: '#6b6b6b',
+};
+
+// 阴影配置
+export const Shadows = {
+  // 卡片阴影
+  card: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  // 浮层阴影
+  modal: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  // 按钮悬浮
+  button: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  // FAB 按钮
+  fab: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+  },
 };
 
 export const Spacing = {
-  cardPaddingV: 12,
-  cardPaddingH: 16,
-  cardRadius: 10, // 0.625rem
+  cardPaddingV: 14,
+  cardPaddingH: 18,
+  cardRadius: 14, // 更大的圆角，更现代
   accentBorderWidth: 1,
 };
 
