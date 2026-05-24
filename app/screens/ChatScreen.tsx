@@ -1,3 +1,5 @@
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     ActivityIndicator,
@@ -20,7 +22,7 @@ import { BackIcon, CameraIcon, MenuIcon, PlusIcon, SendIcon } from '../../src/co
 import { LANGUAGES, useLanguage } from '../../src/contexts/LanguageContext';
 import { QueryMode } from '../../src/services/deepseek';
 import { sendMessage } from '../../src/services/modelService';
-import { Colors } from '../../src/theme';
+import { Colors, Shadows } from '../../src/theme';
 import { getAllConversations, saveConversation } from '../../src/utils/conversations';
 import { extractParseItems, parseAIResponse, ParseItem } from '../../src/utils/japaneseParser';
 import { DetectedLanguage, recognizeText } from '../../src/utils/ocr';
@@ -494,8 +496,11 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
   }, [learningLanguage, ParseItemRow, highlightedMessageId]);
 
   return (
-    <View style={[styles.container, { paddingTop: Math.max(insets.top, 20) }]}>
-      <View style={styles.header}>
+    <LinearGradient
+      colors={[Colors.bgGradientStart, Colors.bgGradientEnd]}
+      style={[styles.container, { paddingTop: Math.max(insets.top, 20) }]}
+    >
+      <BlurView intensity={80} tint="light" style={styles.header}>
         <View style={styles.headerSide}>
           <Pressable onPress={onGoToFavorites} style={styles.headerBtn}>
             <BackIcon size={20} color={Colors.headerIcon} />
@@ -510,7 +515,7 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
             <MenuIcon size={20} color={Colors.headerIcon} />
           </Pressable>
         </View>
-      </View>
+      </BlurView>
 
       <HistoryModal
         visible={showHistory}

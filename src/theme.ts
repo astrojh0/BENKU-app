@@ -1,209 +1,228 @@
 export const Colors = {
-  // Base
-  bg: '#ffffff',
-  card: '#ffffff',
-  cardAccent: '#ffffff',
+  // Gradients (used in LinearGradient components)
+  gradientPrimary: ['#38BDF8', '#6366F1'] as const,  // Sky blue to Indigo
+  gradientSecondary: ['#06B6D4', '#3B82F6'] as const, // Cyan to Blue
+  gradientAccent: ['#60A5FA', '#818CF8'] as const,    // Light blue to Purple-blue
 
-  // Primary (near black)
-  accent: '#030213',
-  accentPressed: '#1a1a2e',
-  accentBorder: '#030213',
+  // Base backgrounds
+  bg: '#F0F9FF',           // Light sky blue
+  bgGradientStart: '#F0F9FF',
+  bgGradientEnd: '#E0F2FE',
+  card: 'rgba(255, 255, 255, 0.75)',
+  cardAccent: 'rgba(255, 255, 255, 0.85)',
+  cardBorder: 'rgba(255, 255, 255, 0.6)',
+
+  // Primary accent colors
+  accent: '#3B82F6',       // Blue
+  accentPressed: '#2563EB',
+  accentBorder: '#3B82F6',
+  accentSecondary: '#6366F1', // Indigo
 
   // Text
-  textPrimary: '#030213',
-  textSecondary: '#717182',
-  textMuted: '#717182',
-  textFurigana: '#030213',
+  textPrimary: '#1E3A5F',  // Deep blue-gray
+  textSecondary: '#64748B',
+  textMuted: '#94A3B8',
+  textFurigana: '#475569',
 
   // Dividers & Borders
-  divider: 'rgba(0, 0, 0, 0.1)',
-  border: 'rgba(0, 0, 0, 0.1)',
+  divider: 'rgba(59, 130, 246, 0.15)',
+  border: 'rgba(59, 130, 246, 0.2)',
 
   // Input
-  inputBg: '#f3f3f5',
-  inputPlaceholder: '#717182',
+  inputBg: 'rgba(255, 255, 255, 0.8)',
+  inputPlaceholder: '#94A3B8',
 
   // Header
-  headerBg: '#ffffff',
-  headerBorder: 'rgba(0, 0, 0, 0.1)',
-  headerTitle: '#030213',
-  headerIcon: '#030213',
+  headerBg: 'rgba(255, 255, 255, 0.85)',
+  headerBorder: 'rgba(59, 130, 246, 0.15)',
+  headerTitle: '#1E3A5F',
+  headerIcon: '#3B82F6',
 
   // Bubbles
-  bubbleUser: '#f3f3f5',
-  bubbleUserText: '#030213',
-  bubbleAi: '#ffffff',
-  bubbleAiText: '#030213',
+  bubbleUser: 'rgba(59, 130, 246, 0.12)',
+  bubbleUserText: '#1E3A5F',
+  bubbleUserBorder: 'rgba(59, 130, 246, 0.25)',
+  bubbleAi: 'rgba(255, 255, 255, 0.85)',
+  bubbleAiText: '#1E3A5F',
+  bubbleAiBorder: 'rgba(255, 255, 255, 0.6)',
 
   // Quick buttons
-  quickBtnBg: '#f3f3f5',
-  quickBtnActiveBg: '#030213',
-  quickBtnText: '#717182',
+  quickBtnBg: 'rgba(255, 255, 255, 0.7)',
+  quickBtnActiveBg: '#3B82F6',
+  quickBtnText: '#64748B',
   quickBtnActiveText: '#ffffff',
+  quickBtnBorder: 'rgba(59, 130, 246, 0.2)',
 
   // Send button
-  sendBtn: '#030213',
-  sendBtnDisabled: '#cbced4',
+  sendBtn: '#3B82F6',
+  sendBtnDisabled: '#CBD5E1',
 
   // Overlay & Modal
-  overlay: 'rgba(0, 0, 0, 0.4)',
-  modalBg: '#ffffff',
-  modalTitle: '#030213',
-  modalInputBg: '#f3f3f5',
-  modalInputBorder: 'rgba(0, 0, 0, 0.1)',
-  modalInputText: '#030213',
-  modalCancelBg: '#f3f3f5',
-  modalCancelText: '#717182',
-  modalConfirmBg: '#030213',
+  overlay: 'rgba(30, 58, 95, 0.5)',
+  modalBg: 'rgba(255, 255, 255, 0.95)',
+  modalTitle: '#1E3A5F',
+  modalInputBg: 'rgba(241, 245, 249, 0.8)',
+  modalInputBorder: 'rgba(59, 130, 246, 0.2)',
+  modalInputText: '#1E3A5F',
+  modalCancelBg: 'rgba(241, 245, 249, 0.8)',
+  modalCancelText: '#64748B',
+  modalConfirmBg: '#3B82F6',
   modalConfirmText: '#ffffff',
 
   // Chips
-  chipBg: '#f3f3f5',
-  chipActiveBg: '#030213',
-  chipText: '#717182',
+  chipBg: 'rgba(255, 255, 255, 0.7)',
+  chipActiveBg: '#3B82F6',
+  chipText: '#64748B',
   chipActiveText: '#ffffff',
+  chipBorder: 'rgba(59, 130, 246, 0.2)',
 
   // Danger
-  dangerBg: '#fef2f2',
-  dangerText: '#d4183d',
+  dangerBg: 'rgba(239, 68, 68, 0.1)',
+  dangerText: '#DC2626',
 
   // Links
-  link: '#030213',
+  link: '#3B82F6',
 
   // Stars
-  star: '#030213',
-  masteredStar: '#030213',
+  star: '#F59E0B',
+  masteredStar: '#F59E0B',
 
   // Player
-  playerFab: '#030213',
+  playerFab: '#3B82F6',
   playerFabText: '#ffffff',
-  nowPlayingBg: '#ffffff',
-  nowPlayingBorder: 'rgba(0, 0, 0, 0.1)',
+  nowPlayingBg: 'rgba(255, 255, 255, 0.9)',
+  nowPlayingBorder: 'rgba(59, 130, 246, 0.2)',
 
   // List items
-  itemActiveBg: '#f3f3f5',
-  itemActiveBorder: '#030213',
-  itemText: '#030213',
-  itemTranslation: '#717182',
-  itemDate: '#717182',
-  itemPressed: '#f3f3f5',
-  itemBorder: 'rgba(0, 0, 0, 0.1)',
+  itemActiveBg: 'rgba(59, 130, 246, 0.1)',
+  itemActiveBorder: '#3B82F6',
+  itemText: '#1E3A5F',
+  itemTranslation: '#64748B',
+  itemDate: '#94A3B8',
+  itemPressed: 'rgba(59, 130, 246, 0.08)',
+  itemBorder: 'rgba(59, 130, 246, 0.15)',
 
   // Switch
-  switchTrack: '#cbced4',
+  switchTrack: '#CBD5E1',
+  switchTrackActive: '#3B82F6',
   switchThumb: '#ffffff',
 
   // Stepper
-  stepperBg: '#f3f3f5',
-  stepperText: '#030213',
+  stepperBg: 'rgba(255, 255, 255, 0.8)',
+  stepperText: '#1E3A5F',
 
   // Clear button
-  clearBtnBg: '#fef2f2',
-  clearBtnText: '#d4183d',
+  clearBtnBg: 'rgba(239, 68, 68, 0.1)',
+  clearBtnText: '#DC2626',
 
   // About
-  aboutText: '#717182',
+  aboutText: '#64748B',
 
   // Dots
-  dotInactive: '#cbced4',
-  dotActive: '#030213',
+  dotInactive: '#CBD5E1',
+  dotActive: '#3B82F6',
 
   // Parse
-  parseItemBorder: 'rgba(0, 0, 0, 0.1)',
-  parseActionBorder: 'rgba(0, 0, 0, 0.1)',
-  parseActionText: '#717182',
+  parseItemBorder: 'rgba(59, 130, 246, 0.15)',
+  parseActionBorder: 'rgba(59, 130, 246, 0.2)',
+  parseActionText: '#64748B',
 
   // Menu
-  menuBg: '#ffffff',
-  menuBorder: 'rgba(0, 0, 0, 0.1)',
-  menuItemText: '#030213',
-  menuDivider: 'rgba(0, 0, 0, 0.1)',
+  menuBg: 'rgba(255, 255, 255, 0.95)',
+  menuBorder: 'rgba(59, 130, 246, 0.15)',
+  menuItemText: '#1E3A5F',
+  menuDivider: 'rgba(59, 130, 246, 0.1)',
 
   // Selector
-  selectorBg: '#ffffff',
-  selectorText: '#030213',
-  selectorArrow: '#717182',
+  selectorBg: 'rgba(255, 255, 255, 0.9)',
+  selectorText: '#1E3A5F',
+  selectorArrow: '#64748B',
 
   // Fallback icon
-  fallbackIconBg: '#f3f3f5',
-  fallbackIconText: '#030213',
+  fallbackIconBg: 'rgba(59, 130, 246, 0.1)',
+  fallbackIconText: '#3B82F6',
 
   // Checkmark
-  checkmark: '#030213',
+  checkmark: '#3B82F6',
 
   // History
-  historyTitle: '#030213',
-  historyItemText: '#030213',
-  historyItemDate: '#717182',
-  historySeparator: 'rgba(0, 0, 0, 0.1)',
-  historyEmpty: '#717182',
+  historyTitle: '#1E3A5F',
+  historyItemText: '#1E3A5F',
+  historyItemDate: '#94A3B8',
+  historySeparator: 'rgba(59, 130, 246, 0.15)',
+  historyEmpty: '#94A3B8',
 
   // Sheet
-  sheetBg: '#ffffff',
-  sheetTitle: '#030213',
-  sheetDivider: 'rgba(0, 0, 0, 0.1)',
-  sheetLabel: '#717182',
-  sheetCancel: '#717182',
+  sheetBg: 'rgba(255, 255, 255, 0.98)',
+  sheetTitle: '#1E3A5F',
+  sheetDivider: 'rgba(59, 130, 246, 0.15)',
+  sheetLabel: '#64748B',
+  sheetCancel: '#64748B',
 
   // Folders
-  folderChipBg: '#f3f3f5',
-  folderChipActiveBg: '#030213',
-  folderChipText: '#717182',
+  folderChipBg: 'rgba(255, 255, 255, 0.7)',
+  folderChipActiveBg: '#3B82F6',
+  folderChipText: '#64748B',
   folderChipActiveText: '#ffffff',
+  folderChipBorder: 'rgba(59, 130, 246, 0.2)',
 
   // Sort button
-  sortBtnBg: '#f3f3f5',
-  sortBtnText: '#717182',
+  sortBtnBg: 'rgba(255, 255, 255, 0.7)',
+  sortBtnText: '#64748B',
 
   // Add folder
-  addFolderBg: '#f3f3f5',
-  addFolderText: '#030213',
+  addFolderBg: 'rgba(255, 255, 255, 0.7)',
+  addFolderText: '#3B82F6',
 
   // Text input
-  textInputBg: '#ffffff',
-  textInputBorder: 'rgba(0, 0, 0, 0.1)',
-  textInputText: '#030213',
+  textInputBg: 'rgba(255, 255, 255, 0.8)',
+  textInputBorder: 'rgba(59, 130, 246, 0.2)',
+  textInputText: '#1E3A5F',
 
   // Link card
-  linkCardBg: '#ffffff',
-  linkCardBorder: 'rgba(0, 0, 0, 0.1)',
-  linkText: '#030213',
+  linkCardBg: 'rgba(255, 255, 255, 0.8)',
+  linkCardBorder: 'rgba(59, 130, 246, 0.15)',
+  linkText: '#3B82F6',
 
   // About
-  aboutTitle: '#030213',
+  aboutTitle: '#1E3A5F',
 
   // Progress
-  progressText: '#717182',
+  progressText: '#64748B',
 
   // Now playing
-  nowSentence: '#030213',
-  nowKana: '#717182',
-  nowTranslation: '#717182',
-  passInfo: '#717182',
+  nowSentence: '#1E3A5F',
+  nowKana: '#64748B',
+  nowTranslation: '#64748B',
+  passInfo: '#94A3B8',
 
   // Empty
-  emptyText: '#717182',
+  emptyText: '#94A3B8',
 
   // Control buttons
-  ctrlBtnBg: '#f3f3f5',
-  playBtnBg: '#030213',
+  ctrlBtnBg: 'rgba(255, 255, 255, 0.8)',
+  playBtnBg: '#3B82F6',
   playBtnText: '#ffffff',
 
   // Section title
-  sectionTitle: '#717182',
+  sectionTitle: '#64748B',
 
   // Row
-  rowLabel: '#717182',
-  rowValue: '#717182',
+  rowLabel: '#64748B',
+  rowValue: '#1E3A5F',
 
   // Close
-  closeText: '#717182',
+  closeText: '#64748B',
+
+  // Glass effects
+  glassBg: 'rgba(255, 255, 255, 0.7)',
+  glassBorder: 'rgba(255, 255, 255, 0.5)',
 };
 
 export const Spacing = {
-  cardPaddingV: 12,
-  cardPaddingH: 16,
-  cardRadius: 10, // 0.625rem
+  cardPaddingV: 14,
+  cardPaddingH: 18,
+  cardRadius: 16,
   accentBorderWidth: 1,
 };
 
@@ -213,4 +232,21 @@ export const FontSize = {
   furigana: 12,
   sectionTitle: 13,
   listItem: 15,
+};
+
+export const Shadows = {
+  card: {
+    shadowColor: '#3B82F6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  button: {
+    shadowColor: '#3B82F6',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 3,
+  },
 };
