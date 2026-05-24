@@ -91,7 +91,7 @@ export default function ImageCropper({ visible, imageSrc, onCancel, onCrop }: Im
       image.addEventListener('load', () => resolve(image));
       image.addEventListener('error', (error) => reject(error));
       image.src = url;
-    });
+    };
 
   const handleConfirm = async () => {
     if (!croppedAreaPixels) return;
@@ -130,8 +130,9 @@ export default function ImageCropper({ visible, imageSrc, onCancel, onCrop }: Im
             onCropChange={setCrop}
             onCropComplete={onCropComplete}
             onZoomChange={setZoom}
-            showGrid={true}
-            objectFit="contain"
+            cropShape="rect"
+            showGrid={false}
+            objectFit="cover"
             style={styles.cropper}
           />
         </View>
