@@ -88,7 +88,13 @@ export default function RootScreen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <Pressable
-        style={styles.previewButton}
+        style={[
+          styles.previewButton,
+          { 
+            top: insets.top + 12,
+            right: 16,
+          }
+        ]}
         onPress={() => router.push('/glass-preview')}>
         <Text style={styles.previewButtonText}>✨ 预览毛玻璃设计</Text>
       </Pressable>
@@ -138,24 +144,20 @@ const styles = StyleSheet.create({
   dotActive: { backgroundColor: Colors.dotActive, width: 18 },
   previewButton: {
     position: 'absolute',
-    top: insets.top + 70,
-    right: 16,
-    backgroundColor: GlassColors.glassPrimary,
-    borderWidth: 1,
-    borderColor: GlassColors.glassBorder,
-    borderRadius: GlassRadius.md,
-    paddingVertical: GlassSpacing.sm,
-    paddingHorizontal: GlassSpacing.md,
+    backgroundColor: '#6366f1',
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     zIndex: 1000,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowColor: '#6366f1',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
   },
   previewButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: GlassColors.textPrimary,
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#ffffff',
   },
 });
