@@ -28,7 +28,7 @@ import { addSentence } from '../../src/utils/storage';
 import { speakWithEdgeTTS } from '../../src/utils/tts';
 import Bubble from '../components/Bubble';
 import HistoryModal, { HistoryItem } from '../components/HistoryModal';
-import ImageCropper from '../components/ImageCropper';
+
 import ModelSelector, { getSelectedModel, ModelType } from '../components/ModelSelector';
 
 const QUICK_BUTTONS: { label: string; mode: QueryMode }[] = [
@@ -76,8 +76,6 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
   const [ocrLoading, setOcrLoading] = useState(false);
   const [ocrProgress, setOcrProgress] = useState(0);
   const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
-  const [cropModalVisible, setCropModalVisible] = useState(false);
-  const [cropImageSrc, setCropImageSrc] = useState<string>('');
   const glowAnim = useRef(new Animated.Value(0.3)).current;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
@@ -295,16 +293,6 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
     handleSend(rawMsg, btn.mode);
   }, [input, handleSend]);
 
-  // 将文件转换为 data URL（用于裁切预览）
-  const fileToDataUrl = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
   // 处理 OCR 识别结果
   const handleOCRResult = useCallback(async (text: string, language: DetectedLanguage) => {
     if (!text) {
@@ -325,50 +313,16 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
     }
   }, [handleSend]);
 
-  // 处理图片上传（先裁切）
+  // 处理图片上传
   const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    try {
-      const dataUrl = await fileToDataUrl(file);
-      setCropImageSrc(dataUrl);
-      setCropModalVisible(true);
-    } catch (error) {
-      Alert.alert('错误', '无法读取图片');
-    } finally {
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
-  }, []);
-
-  // 处理拍照（先裁切）
-  const handleCameraCapture = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const dataUrl = await fileToDataUrl(file);
-      setCropImageSrc(dataUrl);
-      setCropModalVisible(true);
-    } catch (error) {
-      Alert.alert('错误', '无法读取图片');
-    } finally {
-      if (cameraInputRef.current) {
-        cameraInputRef.current.value = '';
-      }
-    }
-  }, []);
-
-  // 处理裁切完成
-  const handleCropComplete = useCallback(async (result: { file: File; base64: string }) => {
-    setCropModalVisible(false);
     setOcrLoading(true);
     setOcrProgress(0);
 
     try {
-      const { text, language } = await recognizeText(result.file, (progress) => {
+      const { text, language } = await recognizeText(file, (progress) => {
         setOcrProgress(Math.round(progress));
       });
       await handleOCRResult(text, language);
@@ -377,15 +331,37 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
     } finally {
       setOcrLoading(false);
       setOcrProgress(0);
-      setCropImageSrc('');
+      // 清空 input 以便再次选择同一文件
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   }, [handleOCRResult]);
 
-  // 处理裁切取消
-  const handleCropCancel = useCallback(() => {
-    setCropModalVisible(false);
-    setCropImageSrc('');
-  }, []);
+  // 处理拍照
+  const handleCameraCapture = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setOcrLoading(true);
+    setOcrProgress(0);
+
+    try {
+      const { text, language } = await recognizeText(file, (progress) => {
+        setOcrProgress(Math.round(progress));
+      });
+      await handleOCRResult(text, language);
+    } catch (error) {
+      Alert.alert('识别失败', '请重试或使用其他图片');
+    } finally {
+      setOcrLoading(false);
+      setOcrProgress(0);
+      // 清空 input 以便再次拍摄
+      if (cameraInputRef.current) {
+        cameraInputRef.current.value = '';
+      }
+    }
+  }, [handleOCRResult]);
 
   const handleSaveSentence = useCallback(async (text: string, context?: string) => {
     try {
@@ -712,13 +688,6 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
           </View>
         )}
       </Animated.View>
-
-      <ImageCropper
-        visible={cropModalVisible}
-        imageSrc={cropImageSrc}
-        onCancel={handleCropCancel}
-        onCrop={handleCropComplete}
-      />
     </View>
   );
 }
