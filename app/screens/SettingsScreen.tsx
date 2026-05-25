@@ -12,6 +12,7 @@ import {
     TextInput,
     View
 } from 'react-native';
+import { useRouter } from 'expo-router';
 import { version as appVersion } from '../../package.json';
 import { useLanguage } from '../../src/contexts/LanguageContext';
 import { syncLoadPlayDuration, syncLoadSettings, syncSaveSettings } from '../../src/services/sync';
@@ -67,6 +68,7 @@ export default function SettingsScreen({ onClose }: { onClose: () => void }) {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [playDuration, setPlayDuration] = useState(0);
   const { learningLanguage, setLearningLanguage, nativeLanguage, setNativeLanguage } = useLanguage();
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -114,6 +116,10 @@ export default function SettingsScreen({ onClose }: { onClose: () => void }) {
         setPlayDuration(0);
       }},
     ]);
+  };
+
+  const handlePreviewIcons = () => {
+    router.push('/icon-preview');
   };
 
   const hours = Math.floor(playDuration / 3600);
@@ -226,6 +232,17 @@ export default function SettingsScreen({ onClose }: { onClose: () => void }) {
             </View>
           </View>
 
+          <Text style={styles.sectionTitle}>外观</Text>
+          <View style={styles.card}>
+            <Pressable onPress={handlePreviewIcons} style={styles.iconPreviewBtn}>
+              <View style={styles.iconPreviewContent}>
+                <Text style={styles.iconPreviewTitle}>🎨 图标预览</Text>
+                <Text style={styles.iconPreviewDesc}>查看 6 种图标设计方案</Text>
+              </View>
+              <Text style={styles.iconPreviewArrow}>→</Text>
+            </Pressable>
+          </View>
+
           <Text style={styles.sectionTitle}>数据</Text>
           <View style={styles.card}>
             <View style={styles.row}>
@@ -309,4 +326,28 @@ const styles = StyleSheet.create({
   linkCard: { backgroundColor: Colors.linkCardBg, borderRadius: 10, padding: 16, borderWidth: 1, borderColor: Colors.linkCardBorder, marginTop: 16 },
   linkRow: { paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: Colors.divider },
   link: { fontSize: 14, color: Colors.link },
+  iconPreviewBtn: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  iconPreviewContent: {
+    flex: 1,
+  },
+  iconPreviewTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.textPrimary,
+    marginBottom: 4,
+  },
+  iconPreviewDesc: {
+    fontSize: 13,
+    color: Colors.textSecondary,
+  },
+  iconPreviewArrow: {
+    fontSize: 20,
+    color: Colors.textSecondary,
+    fontWeight: '600',
+  },
 });
