@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benku APP Icons - 导出 PNG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 60px 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 60px;
+        }
+
+        .icons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            justify-items: center;
+        }
+
+        .icon-wrapper {
+            text-align: center;
+        }
+
+        .icon-container {
+            width: 240px;
+            height: 240px;
+            border-radius: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .icon-container:hover::before {
+            opacity: 1;
+        }
+
+        .icon-svg {
+            width: 140px;
+            height: 140px;
+        }
+
+        .icon-label {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .icon-desc {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .save-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .instructions {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .instructions h2 {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .instructions p {
+            color: rgba(255,255,255,0.7);
+            font-size: 16px;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .instructions strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Benku APP 图标集</h1>
+        <p class="subtitle">右键点击图标 → 另存为图片（PNG/JPG）</p>
+
+        <div class="icons-grid">
+            
+            <!-- 图标 1：现代简约风 -->
+            <div class="icon-wrapper">
+                <div class="icon-container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <svg class="icon-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 书本 -->
+                        <path d="M40 50 L100 30 L160 50 L160 150 L100 130 L40 150 Z" fill="white" fill-opacity="0.95"/>
+                        <path d="M100 30 L100 130" stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
+                        <!-- 地球 -->
+                        <circle cx="140" cy="60" r="25" fill="white" fill-opacity="0.3"/>
+                        <ellipse cx="140" cy="60" rx="25" ry="8" stroke="white" stroke-width="2" fill="none"/>
+                        <path d="M115 60 Q140 45 165 60" stroke="white" stroke-width="1.5" fill="none"/>
+                        <path d="M115 60 Q140 75 165 60" stroke="white" stroke-width="1.5" fill="none"/>
+                        <!-- 文字 B -->
+                        <text x="100" y="105" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="rgba(0,0,0,0.6)" text-anchor="middle">B</text>
+                    </svg>
+                </div>
+                <div class="icon-label">现代简约风</div>
+                <div class="icon-desc">扁平渐变 · 科技感</div>
+                <button class="save-btn" onclick="alert('请右键点击图标 → 另存为图片')">📥 保存此图标</button>
+            </div>
+
+            <!-- 图标 2：活泼彩色风 -->
+            <div class="icon-wrapper">
+                <div class="icon-container" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <svg class="icon-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 对话气泡 -->
+                        <rect x="30" y="40" width="140" height="90" rx="20" fill="white"/>
+                        <path d="M70 130 L90 130 L70 160 L80 130" fill="white"/>
+                        <!-- 书本 -->
+                        <path d="M50 60 L100 45 L150 60 L150 100 L100 85 L50 100 Z" fill="#667eea" fill-opacity="0.9"/>
+                        <path d="M100 45 L100 85" stroke="white" stroke-width="2"/>
+                        <!-- 世界地图简化 -->
+                        <circle cx="140" cy="65" r="20" stroke="#f5576c" stroke-width="2" fill="none"/>
+                        <path d="M125 65 Q140 55 155 65" stroke="#f5576c" stroke-width="1.5" fill="none"/>
+                        <path d="M125 65 Q140 75 155 65" stroke="#f5576c" stroke-width="1.5" fill="none"/>
+                        <!-- 文字 K -->
+                        <text x="100" y="90" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="white" text-anchor="middle">K</text>
+                    </svg>
+                </div>
+                <div class="icon-label">活泼彩色风</div>
+                <div class="icon-desc">彩虹渐变 · 年轻活力</div>
+                <button class="save-btn" onclick="alert('请右键点击图标 → 另存为图片')">📥 保存此图标</button>
+            </div>
+
+            <!-- 图标 3：专业商务风 -->
+            <div class="icon-wrapper">
+                <div class="icon-container" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <svg class="icon-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 几何书本 -->
+                        <rect x="45" y="55" width="110" height="90" rx="8" fill="white"/>
+                        <rect x="55" y="65" width="90" height="70" rx="4" fill="#e8f4fc"/>
+                        <!-- 线条装饰 -->
+                        <line x1="65" y1="80" x2="135" y2="80" stroke="#4facfe" stroke-width="3"/>
+                        <line x1="65" y1="95" x2="120" y2="95" stroke="#4facfe" stroke-width="2" stroke-opacity="0.6"/>
+                        <line x1="65" y1="108" x2="125" y2="108" stroke="#4facfe" stroke-width="2" stroke-opacity="0.4"/>
+                        <line x1="65" y1="121" x2="100" y2="121" stroke="#4facfe" stroke-width="2" stroke-opacity="0.3"/>
+                        <!-- 字母 B -->
+                        <text x="100" y="60" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="#4facfe" text-anchor="middle">B</text>
+                    </svg>
+                </div>
+                <div class="icon-label">专业商务风</div>
+                <div class="icon-desc">几何线条 · 高端专业</div>
+                <button class="save-btn" onclick="alert('请右键点击图标 → 另存为图片')">📥 保存此图标</button>
+            </div>
+
+            <!-- 图标 4：极简主义风 -->
+            <div class="icon-wrapper">
+                <div class="icon-container" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <svg class="icon-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 极简 B -->
+                        <text x="100" y="145" font-family="Arial Black, sans-serif" font-size="120" font-weight="900" fill="white" text-anchor="middle">B</text>
+                        <!-- 简约线条 -->
+                        <line x1="40" y1="160" x2="160" y2="160" stroke="white" stroke-width="3" stroke-opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="icon-label">极简主义风</div>
+                <div class="icon-desc">负空间 · 简约时尚</div>
+                <button class="save-btn" onclick="alert('请右键点击图标 → 另存为图片')">📥 保存此图标</button>
+            </div>
+
+            <!-- 图标 5：可爱萌系风 -->
+            <div class="icon-wrapper">
+                <div class="icon-container" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <svg class="icon-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 圆形背景 -->
+                        <circle cx="100" cy="100" r="70" fill="white" fill-opacity="0.95"/>
+                        <!-- 书本 -->
+                        <path d="M60 70 L100 55 L140 70 L140 130 L100 115 L60 130 Z" fill="#fa709a"/>
+                        <path d="M100 55 L100 115" stroke="white" stroke-width="2"/>
+                        <!-- 樱花 -->
+                        <circle cx="75" cy="65" r="4" fill="#fee140"/>
+                        <circle cx="125" cy="65" r="4" fill="#fee140"/>
+                        <circle cx="100" cy="50" r="4" fill="#fee140"/>
+                        <!-- 文字 B -->
+                        <text x="100" y="100" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">K</text>
+                        <text x="100" y="125" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle">BENKU</text>
+                    </svg>
+                </div>
+                <div class="icon-label">可爱萌系风</div>
+                <div class="icon-desc">柔和粉色 · 温暖治愈</div>
+                <button class="save-btn" onclick="alert('请右键点击图标 → 另存为图片')">📥 保存此图标</button>
+            </div>
+
+            <!-- 图标 6：未来科技风 -->
+            <div class="icon-wrapper">
+                <div class="icon-container" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
+                    <svg class="icon-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 科技圆环 -->
+                        <circle cx="100" cy="100" r="75" stroke="white" stroke-width="3" fill="none" stroke-opacity="0.3"/>
+                        <circle cx="100" cy="100" r="60" stroke="white" stroke-width="2" fill="none" stroke-opacity="0.5"/>
+                        <circle cx="100" cy="100" r="45" stroke="white" stroke-width="2" fill="rgba(255,255,255,0.1)"/>
+                        <!-- 字母 B -->
+                        <text x="100" y="115" font-family="Arial Black, sans-serif" font-size="50" font-weight="900" fill="white" text-anchor="middle">B</text>
+                        <!-- 科技点 -->
+                        <circle cx="100" cy="30" r="4" fill="white"/>
+                        <circle cx="170" cy="100" r="3" fill="white" fill-opacity="0.6"/>
+                        <circle cx="30" cy="100" r="3" fill="white" fill-opacity="0.6"/>
+                        <circle cx="100" cy="170" r="4" fill="white"/>
+                    </svg>
+                </div>
+                <div class="icon-label">未来科技风</div>
+                <div class="icon-desc">3D 效果 · AI 智能感</div>
+                <button class="save-btn" onclick="alert('请右键点击图标 → 另存为图片')">📥 保存此图标</button>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h2>💡 如何保存为 PNG/JPG</h2>
+            <p>
+                <strong>方法 1：</strong>右键点击任意图标 → 选择"图片另存为" → 选择格式（PNG/JPG）→ 保存<br><br>
+                <strong>方法 2：</strong>使用截图工具（Mac: ⌘⇧4 / Windows: Win+Shift+S）→ 框选图标区域 → 保存<br><br>
+                <strong>方法 3：</strong>点击浏览器右上角菜单 → 打印 → 另存为 PDF
+            </p>
+        </div>
+    </div>
+</body>
+</html>
