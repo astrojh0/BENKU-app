@@ -34,6 +34,7 @@ import ModelSelector, { getSelectedModel, ModelType } from '../components/ModelS
 const QUICK_BUTTONS: { label: string; mode: QueryMode }[] = [
   { label: '日文怎麼說', mode: 'translate' },
   { label: '什么意思', mode: 'explain' },
+  { label: '叫啥来着', mode: 'quick_translate' },
   { label: '自由提問', mode: 'free' },
 ];
 
@@ -58,6 +59,7 @@ interface ChatMessage {
   saved?: boolean;
   createdAt: number;
   conversationId?: string;
+  mode?: QueryMode;
 }
 
 export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () => void }) {
@@ -223,6 +225,9 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
   const buildUserMessage = useCallback((rawInput: string, mode: QueryMode): string => {
     const trimmed = rawInput.trim();
     const langName = learningLanguage === 'ja' ? '日语' : learningLanguage === 'en' ? '英语' : learningLanguage === 'ko' ? '韩语' : learningLanguage === 'fr' ? '法语' : learningLanguage === 'de' ? '德语' : learningLanguage === 'es' ? '西班牙语' : '目标语言';
+    if (mode === 'quick_translate') {
+      return trimmed; // 直接返回用户输入，不添加额外内容
+    }
     if (mode === 'translate') {
       return `"${trimmed}"用${langName}怎么说？`;
     }
@@ -245,6 +250,7 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
       role: 'user',
       text: userMessage,
       createdAt: Date.now(),
+      mode: currentMode,
     };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
@@ -257,6 +263,7 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
         text: res.content,
         content: res.content,
         createdAt: Date.now(),
+        mode: currentMode,
       };
       setMessages((prev) => [...prev, aiMsg]);
 
@@ -456,6 +463,22 @@ export default function ChatScreen({ onGoToFavorites }: { onGoToFavorites: () =>
     }
 
     const rawContent = item.content || item.text;
+
+    // 如果是 quick_translate 模式，直接显示纯文本，不做任何解析
+    if (item.mode === 'quick_translate') {
+      return (
+        <View style={[
+          styles.aiCard,
+          isHighlighted && { backgroundColor: Colors.accent + '22' }
+        ]}>
+          <Text style={styles.quickTranslateText}>
+            {rawContent}
+          </Text>
+        </View>
+      );
+    }
+
+    // 其他模式的处理保持不变
     const blocks = parseAIResponse(rawContent);
 
     return (
@@ -798,6 +821,14 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     marginTop: 12,
     marginBottom: 6,
+  },
+  quickTranslateText: {
+    fontSize: 17,
+    fontWeight: '500',
+    color: '#111827',
+    lineHeight: 28,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
   },
   quickRow: {
     flexDirection: 'row',

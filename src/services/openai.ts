@@ -3,6 +3,10 @@ import { QueryMode, SentenceResponse } from './deepseek';
 function buildSystemPrompt(targetLang: string, mode: QueryMode, nativeLanguage: string = '中文'): string {
   const langName = targetLang === 'ja' ? '日语' : targetLang === 'en' ? '英语' : targetLang === 'ko' ? '韩语' : targetLang === 'fr' ? '法语' : targetLang === 'de' ? '德语' : targetLang === 'es' ? '西班牙语' : '目标语言';
 
+  if (mode === 'quick_translate') {
+    return `你是一个翻译工具。用户会输入一句话，如果这句话是用户的母语（当前母语为 ${nativeLanguage}），请将其翻译成学习语言（当前学习语言为 ${langName}），并提供 3 到 5 种不同说法，每行一个句子，不加序号、不加解释、不加额外文字。如果用户输入的是学习语言，请将其翻译成母语，只返回一个最常用的翻译，不加任何注释。只输出翻译结果，不要输出任何其他内容。`;
+  }
+
   if (mode === 'translate') {
     return `用户的母语是${nativeLanguage}。你是一个专业的语言老师。用户会用母语问"xxx用${langName}怎么说"。你必须严格按照以下 Markdown 格式输出，不得省略任何章节（如果目标语言没有敬语概念，则写"敬语版：同口语版"）：
 
