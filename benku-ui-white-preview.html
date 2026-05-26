@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BENKU UI Preview - Sketch Design</title>
+    <title>BENKU UI Preview - Glass Slider Design</title>
     <style>
         :root {
             --bg: #F5F5F7;
@@ -11,13 +11,13 @@
             --text-primary: #1D1D1F;
             --text-secondary: #86868B;
             --text-muted: #9C9C9C;
-            --border: #E8E8ED;
+            --border: #E5E5EA;
             --radius-xl: 32px;
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
             --radius-full: 9999px;
-            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.03);
             --shadow-btn: 0 2px 8px rgba(0, 0, 0, 0.08);
             --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.08);
         }
@@ -118,61 +118,45 @@
             color: var(--text-primary);
         }
 
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 0 4px 16px;
-        }
-
-        .tab-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            max-width: 280px;
-        }
-
-        .tab-btn {
-            padding: 10px 16px;
+        .segmented-control {
+            margin: 8px 4px 20px;
+            padding: 4px;
+            background: rgba(0, 0, 0, 0.04);
             border-radius: var(--radius-full);
-            border: none;
-            font-size: 14px;
-            font-weight: 500;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .segment-glass {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            height: calc(100% - 8px);
             background: var(--bg-card);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-btn);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .segment-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 500;
             color: var(--text-secondary);
             cursor: pointer;
-            white-space: nowrap;
-            box-shadow: var(--shadow-btn);
-            transition: all 0.15s ease;
+            position: relative;
+            z-index: 2;
+            transition: color 0.2s ease;
         }
 
-        .tab-btn:active {
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
-            transform: scale(0.97);
-        }
-
-        .tab-btn.active {
-            background: var(--text-primary);
-            color: var(--bg-card);
-            box-shadow: var(--shadow-card);
-        }
-
-        .text-btn {
-            padding: 12px 20px;
-            border-radius: var(--radius-lg);
-            border: none;
-            font-size: 14px;
-            font-weight: 500;
-            background: var(--bg-card);
+        .segment-btn.active {
             color: var(--text-primary);
-            cursor: pointer;
-            box-shadow: var(--shadow-btn);
-            transition: all 0.15s ease;
-        }
-
-        .text-btn:active {
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
-            transform: scale(0.97);
+            font-weight: 600;
         }
 
         .chat-content {
@@ -182,11 +166,40 @@
             padding-bottom: 120px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         .chat-content::-webkit-scrollbar {
             display: none;
+        }
+
+        .message-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            padding: 4px 8px;
+        }
+
+        .message-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            box-shadow: var(--shadow-card);
+            margin: 4px 0;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .card-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
         }
 
         .bubble {
@@ -227,10 +240,11 @@
             display: flex;
             align-items: center;
             background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: var(--radius-full);
             padding: 0 20px;
             height: 56px;
-            box-shadow: var(--shadow-btn);
+            box-shadow: var(--shadow-card);
         }
 
         .input-field {
@@ -252,7 +266,7 @@
             height: 56px;
             border-radius: 50%;
             background: var(--text-primary);
-            border: none;
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -285,12 +299,12 @@
     <div class="preview-container">
         <div class="preview-header">
             <h1>BENKU</h1>
-            <p>Sketch-Based Design Preview</p>
+            <p>Glass Slider Design Preview</p>
         </div>
         
         <div class="screens-grid">
             <div class="phone-frame">
-                <div class="phone-title">Chat Screen (Sketch)</div>
+                <div class="phone-title">Chat Screen</div>
                 <div class="phone-screen">
                     <div class="phone-inner">
                         <div class="status-bar">
@@ -298,27 +312,48 @@
                             <span>●●●</span>
                         </div>
                         
-                        <div class="top-bar">
-                            <div class="tab-buttons">
-                                <button class="tab-btn active">日语</button>
-                                <button class="tab-btn">什么意思</button>
-                                <button class="tab-btn">提问</button>
-                            </div>
-                            <button class="text-btn">文字</button>
+                        <div class="segmented-control">
+                            <div class="segment-glass" style="width: calc(33.333%); left: 4px;"></div>
+                            <button class="segment-btn active">日语</button>
+                            <button class="segment-btn">什么意思</button>
+                            <button class="segment-btn">提问</button>
                         </div>
                         
                         <div class="chat-content">
-                            <div class="bubble bubble-ai">
-                                こんにちは！今日は何を勉強しましょうか？
-                            </div>
                             <div class="bubble bubble-user">
-                                こんにちはを自然な言い方で教えてください
+                                こんにちはを教えてください
                             </div>
-                            <div class="bubble bubble-ai">
-                                自然な会話では「こんちはー」や「ちわっ」のように少し崩した言い方も使われます。
+                            
+                            <div class="message-text">
+                                こんにちは的意思是“你好”，是日语中最常用的问候语。
                             </div>
-                            <div class="bubble bubble-user">
-                                わかりました、ありがとう！
+                            
+                            <div class="message-card">
+                                <div class="card-title">こんにちは</div>
+                                <div class="card-content">
+                                    意思：你好<br>
+                                    词性：感叹词<br>
+                                    罗马音：konnichiwa<br>
+                                    使用场景：白天见面时使用
+                                </div>
+                            </div>
+                            
+                            <div class="message-text">
+                                接下来我来给你举几个例子，让你更好地理解。
+                            </div>
+                            
+                            <div class="message-card">
+                                <div class="card-title">例句</div>
+                                <div class="card-content">
+                                    1. こんにちは、元気ですか？<br>
+                                    你好，最近好吗？<br><br>
+                                    2. こんにちは、お久しぶりです。<br>
+                                    你好，好久不见。
+                                </div>
+                            </div>
+                            
+                            <div class="message-text">
+                                希望这些信息对你有帮助！还有其他想了解的吗？
                             </div>
                         </div>
                         
@@ -335,5 +370,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // 添加交互效果
+        const segmentBtns = document.querySelectorAll('.segment-btn');
+        const segmentGlass = document.querySelector('.segment-glass');
+        
+        segmentBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                segmentBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const width = 100 / segmentBtns.length;
+                segmentGlass.style.width = `calc(${width}% - 6px)`;
+                segmentGlass.style.left = `calc(${index * width}% + 4px)`;
+            });
+        });
+    </script>
 </body>
 </html>
