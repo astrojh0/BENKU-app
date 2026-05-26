@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BENKU UI Preview - Pure White Theme</title>
+    <title>BENKU UI Preview - Sketch Design</title>
     <style>
         :root {
             --bg: #F5F5F7;
@@ -66,6 +66,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
             gap: 60px;
+            justify-items: center;
         }
 
         .phone-frame {
@@ -88,6 +89,7 @@
 
         .phone-screen {
             width: 100%;
+            max-width: 400px;
             aspect-ratio: 9/19.5;
             background: var(--bg);
             border-radius: var(--radius-xl);
@@ -102,7 +104,7 @@
             background: var(--bg);
             display: flex;
             flex-direction: column;
-            padding: 20px 20px;
+            padding: 20px 16px;
         }
 
         .status-bar {
@@ -116,69 +118,71 @@
             color: var(--text-primary);
         }
 
-        .header {
-            height: 60px;
+        .top-bar {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 0 4px;
+            align-items: flex-start;
+            padding: 0 4px 16px;
         }
 
-        .header-btn {
-            width: 48px;
-            height: 48px;
+        .tab-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-card);
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 280px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: var(--radius-full);
             border: none;
+            font-size: 14px;
+            font-weight: 500;
+            background: var(--bg-card);
+            color: var(--text-secondary);
             cursor: pointer;
-            color: var(--text-primary);
-            border-radius: 50%;
+            white-space: nowrap;
             box-shadow: var(--shadow-btn);
             transition: all 0.15s ease;
         }
 
-        .header-btn:active {
+        .tab-btn:active {
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
             transform: scale(0.97);
         }
 
-        .header-btn svg {
-            width: 20px;
-            height: 20px;
+        .tab-btn.active {
+            background: var(--text-primary);
+            color: var(--bg-card);
+            box-shadow: var(--shadow-card);
         }
 
-        .header-center {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-
-        .header-title {
-            font-size: 18px;
-            font-weight: 700;
+        .text-btn {
+            padding: 12px 20px;
+            border-radius: var(--radius-lg);
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            background: var(--bg-card);
             color: var(--text-primary);
-            letter-spacing: -0.02em;
+            cursor: pointer;
+            box-shadow: var(--shadow-btn);
+            transition: all 0.15s ease;
         }
 
-        .model-selector {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
-            color: var(--text-muted);
+        .text-btn:active {
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+            transform: scale(0.97);
         }
 
         .chat-content {
             flex: 1;
             overflow-y: auto;
-            padding: 24px 4px;
-            padding-bottom: 180px;
+            padding: 8px 4px;
+            padding-bottom: 120px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
         .chat-content::-webkit-scrollbar {
@@ -186,10 +190,10 @@
         }
 
         .bubble {
-            max-width: 85%;
+            max-width: 80%;
             padding: 14px 18px;
             font-size: 15px;
-            line-height: 1.55;
+            line-height: 1.5;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-card);
         }
@@ -208,47 +212,14 @@
             border-bottom-left-radius: 8px;
         }
 
-        .quick-actions {
-            position: absolute;
-            bottom: 108px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .quick-btn {
-            padding: 12px 18px;
-            border-radius: var(--radius-full);
-            border: none;
-            font-size: 13px;
-            font-weight: 500;
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            cursor: pointer;
-            white-space: nowrap;
-            box-shadow: var(--shadow-btn);
-            transition: all 0.15s ease;
-        }
-
-        .quick-btn:active {
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
-            transform: scale(0.97);
-        }
-
-        .quick-btn.active {
-            background: var(--text-primary);
-            color: var(--bg-card);
-            box-shadow: var(--shadow-card);
-        }
-
         .input-area {
             position: absolute;
             bottom: 24px;
-            left: 20px;
-            right: 20px;
+            left: 16px;
+            right: 16px;
             display: flex;
             gap: 12px;
+            align-items: center;
         }
 
         .input-wrapper {
@@ -256,9 +227,9 @@
             display: flex;
             align-items: center;
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-full);
             padding: 0 20px;
-            height: 54px;
+            height: 56px;
             box-shadow: var(--shadow-btn);
         }
 
@@ -267,7 +238,7 @@
             height: 100%;
             background: transparent;
             border: none;
-            font-size: 15px;
+            font-size: 16px;
             outline: none;
             color: var(--text-primary);
         }
@@ -277,8 +248,8 @@
         }
 
         .send-btn {
-            width: 54px;
-            height: 54px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             background: var(--text-primary);
             border: none;
@@ -296,322 +267,8 @@
         }
 
         .send-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .favorites-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 0 4px;
-        }
-
-        .folder-tabs {
-            display: flex;
-            gap: 10px;
-            padding: 10px 0;
-            overflow-x: auto;
-        }
-
-        .folder-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .folder-tab {
-            padding: 10px 20px;
-            border-radius: var(--radius-full);
-            border: none;
-            font-size: 13px;
-            font-weight: 500;
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            cursor: pointer;
-            white-space: nowrap;
-            box-shadow: var(--shadow-btn);
-            transition: all 0.15s ease;
-        }
-
-        .folder-tab:active {
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
-            transform: scale(0.97);
-        }
-
-        .folder-tab.active {
-            background: var(--text-primary);
-            color: var(--bg-card);
-            box-shadow: var(--shadow-card);
-        }
-
-        .sentence-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .sentence-list::-webkit-scrollbar {
-            display: none;
-        }
-
-        .sentence-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            box-shadow: var(--shadow-card);
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .sentence-card:active {
-            transform: scale(0.98);
-        }
-
-        .sentence-text {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 6px;
-        }
-
-        .sentence-kana {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        .sentence-translation {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .player-fab {
-            position: absolute;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 16px 36px;
-            background: var(--text-primary);
-            border-radius: var(--radius-full);
-            border: none;
-            font-weight: 600;
-            font-size: 15px;
-            color: var(--bg-card);
-            cursor: pointer;
-            box-shadow: var(--shadow-card);
-            transition: all 0.15s ease;
-        }
-
-        .player-fab:active {
-            transform: translateX(-50%) scale(0.95);
-        }
-
-        .player-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 0 4px;
-        }
-
-        .now-playing {
-            background: var(--text-primary);
-            padding: 40px 24px;
-            text-align: center;
-            color: var(--bg-card);
-            border-radius: var(--radius-lg);
-            margin: 10px 0;
-            box-shadow: var(--shadow-card);
-        }
-
-        .now-playing-text {
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
-        }
-
-        .now-playing-kana {
-            font-size: 14px;
-            opacity: 0.85;
-            margin-bottom: 6px;
-        }
-
-        .now-playing-translation {
-            font-size: 13px;
-            opacity: 0.7;
-        }
-
-        .player-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 0;
-            padding-bottom: 160px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .player-list::-webkit-scrollbar {
-            display: none;
-        }
-
-        .player-item {
-            padding: 20px;
-            border-radius: var(--radius-lg);
-            cursor: pointer;
-            background: var(--bg-card);
-            box-shadow: var(--shadow-card);
-            transition: all 0.15s ease;
-        }
-
-        .player-item:active {
-            transform: scale(0.98);
-        }
-
-        .player-item.active {
-            background: var(--text-primary);
-            color: var(--bg-card);
-        }
-
-        .player-item.active .sentence-translation {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .player-controls {
-            position: absolute;
-            bottom: 32px;
-            left: 0;
-            right: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-        }
-
-        .control-btn {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: var(--bg-card);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 18px;
-            color: var(--text-primary);
-            box-shadow: var(--shadow-btn);
-            transition: all 0.15s ease;
-        }
-
-        .control-btn:active {
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
-            transform: scale(0.95);
-        }
-
-        .play-btn {
-            width: 68px;
-            height: 68px;
-            background: var(--text-primary);
-            color: var(--bg-card);
-            font-size: 22px;
-            box-shadow: var(--shadow-card);
-        }
-
-        .settings-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px 4px;
-        }
-
-        .settings-content::-webkit-scrollbar {
-            display: none;
-        }
-
-        .settings-section {
-            margin-bottom: 32px;
-        }
-
-        .settings-section-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 12px;
-            padding-left: 8px;
-        }
-
-        .settings-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-card);
-        }
-
-        .settings-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 20px;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .settings-row:last-child {
-            border-bottom: none;
-        }
-
-        .settings-row:active {
-            background: rgba(0, 0, 0, 0.02);
-        }
-
-        .settings-label {
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .settings-value {
-            font-size: 14px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .toggle-switch {
-            width: 52px;
-            height: 30px;
-            background: var(--text-muted);
-            border-radius: var(--radius-full);
-            position: relative;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .toggle-switch.active {
-            background: var(--text-primary);
-        }
-
-        .toggle-thumb {
-            width: 26px;
-            height: 26px;
-            background: var(--bg-card);
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .toggle-switch.active .toggle-thumb {
-            transform: translateX(22px);
+            width: 22px;
+            height: 22px;
         }
 
         @media (max-width: 640px) {
@@ -628,12 +285,12 @@
     <div class="preview-container">
         <div class="preview-header">
             <h1>BENKU</h1>
-            <p>Soft & Minimal Interface</p>
+            <p>Sketch-Based Design Preview</p>
         </div>
         
         <div class="screens-grid">
             <div class="phone-frame">
-                <div class="phone-title">Chat Screen</div>
+                <div class="phone-title">Chat Screen (Sketch)</div>
                 <div class="phone-screen">
                     <div class="phone-inner">
                         <div class="status-bar">
@@ -641,20 +298,13 @@
                             <span>●●●</span>
                         </div>
                         
-                        <div class="header">
-                            <button class="header-btn">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-                            </button>
-                            <div class="header-center">
-                                <div class="header-title">BENKU</div>
-                                <div class="model-selector">
-                                    <span>GPT-4</span>
-                                    <span>▼</span>
-                                </div>
+                        <div class="top-bar">
+                            <div class="tab-buttons">
+                                <button class="tab-btn active">日语</button>
+                                <button class="tab-btn">什么意思</button>
+                                <button class="tab-btn">提问</button>
                             </div>
-                            <button class="header-btn">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-                            </button>
+                            <button class="text-btn">文字</button>
                         </div>
                         
                         <div class="chat-content">
@@ -662,207 +312,23 @@
                                 こんにちは！今日は何を勉強しましょうか？
                             </div>
                             <div class="bubble bubble-user">
-                                「こんにちは」を自然な言い方で教えてください
+                                こんにちはを自然な言い方で教えてください
                             </div>
                             <div class="bubble bubble-ai">
                                 自然な会話では「こんちはー」や「ちわっ」のように少し崩した言い方も使われます。
                             </div>
-                        </div>
-                        
-                        <div class="quick-actions">
-                            <button class="quick-btn active">日语怎么说 ▼</button>
-                            <button class="quick-btn">什么意思</button>
-                            <button class="quick-btn">自由提问</button>
+                            <div class="bubble bubble-user">
+                                わかりました、ありがとう！
+                            </div>
                         </div>
                         
                         <div class="input-area">
                             <div class="input-wrapper">
-                                <input class="input-field" placeholder="输入想问的句子或单词" />
+                                <input class="input-field" placeholder="输入..." />
                             </div>
                             <button class="send-btn">
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                             </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="phone-frame">
-                <div class="phone-title">Favorites Screen</div>
-                <div class="phone-screen">
-                    <div class="phone-inner">
-                        <div class="status-bar">
-                            <span>9:41</span>
-                            <span>●●●</span>
-                        </div>
-                        
-                        <div class="header">
-                            <button class="header-btn">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22l1.92 3.32c-.12.2-.07.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c-.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.2-.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-                            </button>
-                            <div class="header-center">
-                                <div class="header-title">收藏夹</div>
-                            </div>
-                            <button class="header-btn" style="font-size: 14px; width: auto; padding: 0 20px; font-weight: 600;">
-                                创建
-                            </button>
-                        </div>
-                        
-                        <div class="favorites-content">
-                            <div class="folder-tabs">
-                                <button class="folder-tab active">全部</button>
-                                <button class="folder-tab">日常用语</button>
-                                <button class="folder-tab">旅游</button>
-                            </div>
-                            
-                            <div class="sentence-list">
-                                <div class="sentence-card">
-                                    <div class="sentence-text">⭐ こんにちは</div>
-                                    <div class="sentence-kana">こんにちは</div>
-                                    <div class="sentence-translation">你好</div>
-                                </div>
-                                <div class="sentence-card">
-                                    <div class="sentence-text">おはようございます</div>
-                                    <div class="sentence-kana">おはようございます</div>
-                                    <div class="sentence-translation">早上好</div>
-                                </div>
-                                <div class="sentence-card">
-                                    <div class="sentence-text">さようなら</div>
-                                    <div class="sentence-kana">さようなら</div>
-                                    <div class="sentence-translation">再见</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button class="player-fab">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                            </svg>
-                            磨耳朵
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="phone-frame">
-                <div class="phone-title">Player Screen</div>
-                <div class="phone-screen">
-                    <div class="phone-inner">
-                        <div class="status-bar">
-                            <span>9:41</span>
-                            <span>●●●</span>
-                        </div>
-                        
-                        <div class="header">
-                            <button class="header-btn">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                            </button>
-                            <div class="header-center">
-                                <div class="header-title">磨耳朵</div>
-                            </div>
-                            <div style="font-size: 13px; color: var(--text-muted); font-weight: 600;">
-                                1/10
-                            </div>
-                        </div>
-                        
-                        <div class="player-content">
-                            <div class="now-playing">
-                                <div class="now-playing-text">こんにちは</div>
-                                <div class="now-playing-kana">こんにちは</div>
-                                <div class="now-playing-translation">你好</div>
-                            </div>
-                            
-                            <div class="player-list">
-                                <div class="player-item active">
-                                    <div class="sentence-text">こんにちは</div>
-                                    <div class="sentence-translation">你好</div>
-                                </div>
-                                <div class="player-item">
-                                    <div class="sentence-text">おはようございます</div>
-                                    <div class="sentence-translation">早上好</div>
-                                </div>
-                                <div class="player-item">
-                                    <div class="sentence-text">さようなら</div>
-                                    <div class="sentence-translation">再见</div>
-                                </div>
-                                <div class="player-item">
-                                    <div class="sentence-text">ありがとう</div>
-                                    <div class="sentence-translation">谢谢</div>
-                                </div>
-                            </div>
-                            
-                            <div class="player-controls">
-                                <button class="control-btn">⏮</button>
-                                <button class="control-btn play-btn">▶</button>
-                                <button class="control-btn">⏭</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="phone-frame">
-                <div class="phone-title">Settings Screen</div>
-                <div class="phone-screen">
-                    <div class="phone-inner">
-                        <div class="status-bar">
-                            <span>9:41</span>
-                            <span>●●●</span>
-                        </div>
-                        
-                        <div class="header">
-                            <button class="header-btn">
-                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                            </button>
-                            <div class="header-center">
-                                <div class="header-title">设置</div>
-                            </div>
-                            <div style="width: 48px;"></div>
-                        </div>
-                        
-                        <div class="settings-content">
-                            <div class="settings-section">
-                                <div class="settings-section-title">语音</div>
-                                <div class="settings-card">
-                                    <div class="settings-row">
-                                        <span class="settings-label">播放翻译</span>
-                                        <div class="toggle-switch active">
-                                            <div class="toggle-thumb"></div>
-                                        </div>
-                                    </div>
-                                    <div class="settings-row">
-                                        <span class="settings-label">同一句间隔</span>
-                                        <span class="settings-value">3s</span>
-                                    </div>
-                                    <div class="settings-row">
-                                        <span class="settings-label">原文播放次数</span>
-                                        <span class="settings-value">4</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-section">
-                                <div class="settings-section-title">通用</div>
-                                <div class="settings-card">
-                                    <div class="settings-row">
-                                        <span class="settings-label">母语</span>
-                                        <span class="settings-value">中文</span>
-                                    </div>
-                                    <div class="settings-row">
-                                        <span class="settings-label">学习语言</span>
-                                        <span class="settings-value">日语</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-section">
-                                <div class="settings-section-title">关于</div>
-                                <div class="settings-card">
-                                    <div class="settings-row">
-                                        <span class="settings-label">BENKU v1.0.0</span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
