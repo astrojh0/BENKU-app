@@ -17,9 +17,9 @@
             --radius-md: 16px;
             --radius-sm: 12px;
             --radius-full: 9999px;
-            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.03);
-            --shadow-btn: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.08);
+            --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
         * {
@@ -121,23 +121,25 @@
         .segmented-control {
             margin: 8px 4px 20px;
             padding: 4px;
-            background: rgba(0, 0, 0, 0.04);
+            background: rgba(0, 0, 0, 0.03);
             border-radius: var(--radius-full);
             display: flex;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .segment-glass {
             position: absolute;
-            top: 4px;
-            left: 4px;
-            height: calc(100% - 8px);
+            top: 3px;
+            left: 3px;
+            height: calc(100% - 6px);
+            width: calc(33.333% - 6px);
             background: var(--bg-card);
             border-radius: var(--radius-full);
-            box-shadow: var(--shadow-btn);
+            box-shadow: var(--shadow-glass);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
+            border: 0.5px solid rgba(255, 255, 255, 0.5);
         }
 
         .segment-btn {
@@ -182,11 +184,23 @@
 
         .message-card {
             background: var(--bg-card);
-            border: 1px solid var(--border);
+            border: 0.5px solid rgba(0, 0, 0, 0.06);
             border-radius: var(--radius-md);
             padding: 16px;
             box-shadow: var(--shadow-card);
             margin: 4px 0;
+            position: relative;
+        }
+
+        .message-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8));
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
         }
 
         .card-title {
@@ -209,6 +223,18 @@
             line-height: 1.5;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-card);
+            position: relative;
+        }
+
+        .bubble::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8));
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
         }
 
         .bubble-user {
@@ -216,6 +242,10 @@
             background: var(--text-primary);
             color: var(--bg-card);
             border-bottom-right-radius: 8px;
+        }
+
+        .bubble-user::before {
+            display: none;
         }
 
         .bubble-ai {
@@ -240,11 +270,23 @@
             display: flex;
             align-items: center;
             background: var(--bg-card);
-            border: 1px solid var(--border);
+            border: 0.5px solid rgba(0, 0, 0, 0.08);
             border-radius: var(--radius-full);
             padding: 0 20px;
             height: 56px;
-            box-shadow: var(--shadow-card);
+            box-shadow: var(--shadow-glass);
+            position: relative;
+        }
+
+        .input-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.9));
+            border-radius: var(--radius-full) var(--radius-full) 0 0;
         }
 
         .input-field {
@@ -266,14 +308,26 @@
             height: 56px;
             border-radius: 50%;
             background: var(--text-primary);
-            border: 1px solid var(--border);
+            border: 0.5px solid rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             color: var(--bg-card);
-            box-shadow: var(--shadow-card);
+            box-shadow: var(--shadow-glass);
             transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+            border-radius: 50% 50% 0 0;
         }
 
         .send-btn:active {
@@ -313,7 +367,7 @@
                         </div>
                         
                         <div class="segmented-control">
-                            <div class="segment-glass" style="width: calc(33.333%); left: 4px;"></div>
+                            <div class="segment-glass" id="segment-glass"></div>
                             <button class="segment-btn active">日语</button>
                             <button class="segment-btn">什么意思</button>
                             <button class="segment-btn">提问</button>
@@ -325,7 +379,7 @@
                             </div>
                             
                             <div class="message-text">
-                                こんにちは的意思是“你好”，是日语中最常用的问候语。
+                                こんにちは的意思是"你好"，是日语中最常用的问候语。
                             </div>
                             
                             <div class="message-card">
@@ -374,7 +428,7 @@
     <script>
         // 添加交互效果
         const segmentBtns = document.querySelectorAll('.segment-btn');
-        const segmentGlass = document.querySelector('.segment-glass');
+        const segmentGlass = document.getElementById('segment-glass');
         
         segmentBtns.forEach((btn, index) => {
             btn.addEventListener('click', () => {
@@ -382,8 +436,7 @@
                 btn.classList.add('active');
                 
                 const width = 100 / segmentBtns.length;
-                segmentGlass.style.width = `calc(${width}% - 6px)`;
-                segmentGlass.style.left = `calc(${index * width}% + 4px)`;
+                segmentGlass.style.left = `calc(${index * width}% + 3px)`;
             });
         });
     </script>
