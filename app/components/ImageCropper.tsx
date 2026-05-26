@@ -99,16 +99,6 @@ export default function ImageCropper({ visible, imageSrc, onCancel, onCrop }: Im
       animationType="slide"
       onRequestClose={onCancel}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Pressable onPress={onCancel} style={styles.headerBtn}>
-            <Text style={styles.cancelText}>取消</Text>
-          </Pressable>
-          <Text style={styles.title}>裁切图片</Text>
-          <Pressable onPress={handleConfirm} style={styles.headerBtn}>
-            <Text style={styles.confirmText}>确认</Text>
-          </Pressable>
-        </View>
-
         <View style={styles.cropContainer}>
           <Cropper
             image={imageSrc}
@@ -123,6 +113,14 @@ export default function ImageCropper({ visible, imageSrc, onCancel, onCrop }: Im
             objectFit="cover"
             style={styles.cropper}
           />
+
+          <Pressable onPress={onCancel} style={styles.closeButton} hitSlop={10}>
+            <Text style={styles.iconText}>❌</Text>
+          </Pressable>
+
+          <Pressable onPress={handleConfirm} style={styles.confirmButton} hitSlop={10}>
+            <Text style={styles.iconText}>✅</Text>
+          </Pressable>
         </View>
 
         <View style={styles.controls}>
@@ -148,42 +146,42 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.bg,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: Colors.headerBg,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: Colors.divider,
-  },
-  headerBtn: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: Colors.headerTitle,
-  },
-  cancelText: {
-    fontSize: 16,
-    color: Colors.textSecondary,
-  },
-  confirmText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: Colors.accent,
-  },
   cropContainer: {
     flex: 1,
     backgroundColor: '#000',
+    position: 'relative',
   },
   cropper: {
     containerStyle: {
       backgroundColor: '#000',
     },
+  },
+  closeButton: {
+    position: 'absolute',
+    left: 16,
+    top: 16,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 0,
+  },
+  confirmButton: {
+    position: 'absolute',
+    right: 16,
+    top: 16,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 0,
+  },
+  iconText: {
+    fontSize: 28,
   },
   controls: {
     flexDirection: 'row',
