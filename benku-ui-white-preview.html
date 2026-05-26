@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BENKU UI Preview - Pure White Theme</title>
+    <style>
+        :root {
+            --color-primary: #0A0A0A;
+            --color-primary-light: #2A2A2A;
+            
+            --color-bg: #FFFFFF;
+            --color-bg-elevated: #FAFAFA;
+            
+            --color-text-primary: #0A0A0A;
+            --color-text-secondary: #666666;
+            --color-text-muted: #AAAAAA;
+            
+            --color-border: #E5E5E5;
+            --color-border-light: #F0F0F0;
+            
+            --color-accent: #3B82F6;
+            --color-accent-glow: rgba(59, 130, 246, 0.15);
+            
+            --font-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-body: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+            
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --dur-fast: 120ms;
+            --dur-med: 200ms;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #F8F8F8 0%, #FFFFFF 100%);
+            font-family: var(--font-body);
+            color: var(--color-text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .preview-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-xl);
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            padding: var(--space-xl) 0;
+        }
+
+        .preview-header h1 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-sm);
+            color: var(--color-text-primary);
+        }
+
+        .preview-header p {
+            color: var(--color-text-secondary);
+            font-size: 1.125rem;
+            font-weight: 400;
+        }
+
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .phone-frame {
+            background: var(--color-bg);
+            border-radius: var(--radius-xl);
+            padding: var(--space-md);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border-light);
+        }
+
+        .phone-title {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--color-border-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .phone-title::before {
+            content: '';
+            width: 3px;
+            height: 16px;
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+
+        .phone-screen {
+            width: 100%;
+            aspect-ratio: 9/19.5;
+            background: var(--color-bg);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow-md);
+        }
+
+        .phone-inner {
+            width: 100%;
+            height: 100%;
+            background: var(--color-bg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-bar {
+            height: 44px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 20px 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+
+        .header {
+            height: 60px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(24px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            border-bottom: 1px solid var(--color-border-light);
+            z-index: 10;
+        }
+
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all var(--dur-fast) var(--ease-out);
+            color: var(--color-text-secondary);
+        }
+
+        .header-btn:hover {
+            background: var(--color-bg-elevated);
+            color: var(--color-text-primary);
+        }
+
+        .header-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .header-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .model-selector {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--color-text-muted);
+        }
+
+        .chat-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-md);
+            padding-bottom: 120px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+            scrollbar-width: none;
+        }
+
+        .chat-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .bubble {
+            max-width: 88%;
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-lg);
+            font-size: 14.5px;
+            line-height: 1.65;
+            position: relative;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bubble-user {
+            align-self: flex-end;
+            background: var(--color-primary);
+            color: #FFFFFF;
+            border-bottom-right-radius: 6px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .bubble-ai {
+            align-self: flex-start;
+            background: var(--color-bg-elevated);
+            color: var(--color-text-primary);
+            border-bottom-left-radius: 6px;
+            border: 1px solid var(--color-border-light);
+        }
+
+        .quick-actions {
+            position: absolute;
+            bottom: 112px;
+            left: var(--space-md);
+            right: var(--space-md);
+            display: flex;
+            gap: 6px;
+            padding: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .quick-actions::-webkit-scrollbar {
+            display: none;
+        }
+
+        .quick-btn {
+            padding: 10px 16px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--color-border);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all var(--dur-fast) var(--ease-out);
+            background: transparent;
+            color: var(--color-text-secondary);
+            flex-shrink: 0;
+        }
+
+        .quick-btn:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            background: var(--color-accent-glow);
+        }
+
+        .quick-btn.active {
+            background: var(--color-primary);
+            border-color: transparent;
+            color: #FFFFFF;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .input-area {
+            position: absolute;
+            bottom: 24px;
+            left: var(--space-md);
+            right: var(--space-md);
+            display: flex;
+            gap: 10px;
+            padding: 0;
+            background: transparent;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 28px;
+            padding: 0 20px;
+            height: 56px;
+            transition: all var(--dur-fast) var(--ease-out);
+            box-shadow: var(--shadow-xs);
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .input-field {
+            flex: 1;
+            height: 100%;
+            background: transparent;
+            border: none;
+            font-size: 15px;
+            outline: none;
+            color: var(--color-text-primary);
+        }
+
+        .input-field::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .send-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--dur-fast) var(--ease-out);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #FFFFFF;
+        }
+
+        .favorites-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .folder-tabs {
+            display: flex;
+            gap: 8px;
+            padding: var(--space-sm) var(--space-md);
+            overflow-x: auto;
+            border-bottom: 1px solid var(--color-border-light);
+            scrollbar-width: none;
+        }
+
+        .folder-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .folder-tab {
+            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            border: 1px solid transparent;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all var(--dur-fast) var(--ease-out);
+            background: transparent;
+            color: var(--color-text-secondary);
+        }
+
+        .folder-tab:hover {
+            background: var(--color-bg-elevated);
+        }
+
+        .folder-tab.active {
+            background: var(--color-primary);
+            color: #FFFFFF;
+        }
+
+        .sentence-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-md);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            scrollbar-width: none;
+        }
+
+        .sentence-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sentence-card {
+            background: transparent;
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            border: 1px solid var(--color-border-light);
+            transition: all var(--dur-fast) var(--ease-out);
+            cursor: pointer;
+        }
+
+        .sentence-card:hover {
+            background: var(--color-bg-elevated);
+            border-color: var(--color-border);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sentence-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sentence-kana {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            margin-bottom: 4px;
+        }
+
+        .sentence-translation {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+
+        .player-fab {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: var(--color-primary);
+            border-radius: var(--radius-full);
+            border: none;
+            font-weight: 600;
+            font-size: 15px;
+            color: #FFFFFF;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all var(--dur-fast) var(--ease-out);
+        }
+
+        .player-fab:hover {
+            transform: translateX(-50%) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .player-fab:active {
+            transform: translateX(-50%) scale(0.98);
+        }
+
+        .player-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .now-playing {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            padding: var(--space-xl);
+            text-align: center;
+            color: #FFFFFF;
+        }
+
+        .now-playing-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .now-playing-kana {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 6px;
+        }
+
+        .now-playing-translation {
+            font-size: 13px;
+            opacity: 0.75;
+        }
+
+        .player-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-md) var(--space-md) 160px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            scrollbar-width: none;
+        }
+
+        .player-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .player-item {
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--dur-fast) var(--ease-out);
+            background: transparent;
+            border: 1px solid var(--color-border-light);
+        }
+
+        .player-item.active {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: var(--color-accent);
+        }
+
+        .player-item:not(.active):hover {
+            background: var(--color-bg-elevated);
+            border-color: var(--color-border);
+        }
+
+        .player-controls {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xl);
+        }
+
+        .control-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            transition: all var(--dur-fast) var(--ease-out);
+        }
+
+        .control-btn:hover {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: #FFFFFF;
+            transform: scale(1.05);
+        }
+
+        .play-btn {
+            width: 68px;
+            height: 68px;
+            background: var(--color-primary);
+            border-color: transparent;
+            font-size: 24px;
+            color: #FFFFFF;
+            box-shadow: var(--shadow-md);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .settings-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-md);
+            scrollbar-width: none;
+        }
+
+        .settings-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .settings-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .settings-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-sm);
+            padding-left: 4px;
+        }
+
+        .settings-card {
+            background: var(--color-bg-elevated);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border-light);
+            overflow: hidden;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--color-border-light);
+            transition: background var(--dur-fast) var(--ease-out);
+        }
+
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+
+        .settings-row:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .settings-label {
+            font-size: 15px;
+            color: var(--color-text-primary);
+        }
+
+        .settings-value {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            width: 52px;
+            height: 28px;
+            background: var(--color-border);
+            border-radius: var(--radius-full);
+            position: relative;
+            cursor: pointer;
+            transition: all var(--dur-fast) var(--ease-out);
+        }
+
+        .toggle-switch.active {
+            background: var(--color-primary);
+        }
+
+        .toggle-thumb {
+            width: 24px;
+            height: 24px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            box-shadow: var(--shadow-xs);
+            transition: transform var(--dur-fast) var(--ease-out);
+        }
+
+        .toggle-switch.active .toggle-thumb {
+            transform: translateX(24px);
+        }
+
+        @media (max-width: 640px) {
+            .preview-container {
+                padding: var(--space-lg);
+            }
+            .screens-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <div class="preview-header">
+            <h1>BENKU UI Preview</h1>
+            <p>纯白主题 · 高级简约设计</p>
+        </div>
+        
+        <div class="screens-grid">
+            <div class="phone-frame">
+                <div class="phone-title">Chat Screen</div>
+                <div class="phone-screen">
+                    <div class="phone-inner">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>•••</span>
+                        </div>
+                        
+                        <div class="header">
+                            <button class="header-btn">
+                                <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                            </button>
+                            <div class="header-center">
+                                <div class="header-title">BENKU</div>
+                                <div class="model-selector">
+                                    <span>GPT-4</span>
+                                    <span>▼</span>
+                                </div>
+                            </div>
+                            <button class="header-btn">
+                                <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                            </button>
+                        </div>
+                        
+                        <div class="chat-content">
+                            <div class="bubble bubble-ai">
+                                こんにちは！今日は何を勉強しましょうか？
+                            </div>
+                            <div class="bubble bubble-user">
+                                「こんにちは」を自然な言い方で教えてください
+                            </div>
+                            <div class="bubble bubble-ai">
+                                自然な会話では「こんちはー」や「ちわっ」のように少し崩した言い方も使われます。
+                            </div>
+                        </div>
+                        
+                        <div class="quick-actions">
+                            <button class="quick-btn active">日语怎么说 ▼</button>
+                            <button class="quick-btn">什么意思</button>
+                            <button class="quick-btn">自由提问</button>
+                        </div>
+                        
+                        <div class="input-area">
+                            <div class="input-wrapper">
+                                <input class="input-field" placeholder="输入想问的句子或单词" />
+                            </div>
+                            <button class="send-btn">
+                                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phone-frame">
+                <div class="phone-title">Favorites Screen</div>
+                <div class="phone-screen">
+                    <div class="phone-inner">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>•••</span>
+                        </div>
+                        
+                        <div class="header">
+                            <button class="header-btn">
+                                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22l1.92 3.32c-.12.2-.07.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.2.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                            </button>
+                            <div class="header-center">
+                                <div class="header-title">收藏夹</div>
+                            </div>
+                            <button class="header-btn" style="font-size: 14px; width: auto; padding: 0 12px; font-weight: 500;">
+                                创建
+                            </button>
+                        </div>
+                        
+                        <div class="favorites-content">
+                            <div class="folder-tabs">
+                                <button class="folder-tab active">全部</button>
+                                <button class="folder-tab">日常用语</button>
+                                <button class="folder-tab">旅游</button>
+                            </div>
+                            
+                            <div class="sentence-list">
+                                <div class="sentence-card">
+                                    <div class="sentence-text">⭐ こんにちは</div>
+                                    <div class="sentence-kana">こんにちは</div>
+                                    <div class="sentence-translation">你好</div>
+                                </div>
+                                <div class="sentence-card">
+                                    <div class="sentence-text">おはようございます</div>
+                                    <div class="sentence-kana">おはようございます</div>
+                                    <div class="sentence-translation">早上好</div>
+                                </div>
+                                <div class="sentence-card">
+                                    <div class="sentence-text">さようなら</div>
+                                    <div class="sentence-kana">さようなら</div>
+                                    <div class="sentence-translation">再见</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="player-fab">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                            </svg>
+                            磨耳朵
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phone-frame">
+                <div class="phone-title">Player Screen</div>
+                <div class="phone-screen">
+                    <div class="phone-inner">
+                        <div class="status-bar" style="background: transparent;">
+                            <span>9:41</span>
+                            <span>•••</span>
+                        </div>
+                        
+                        <div class="header">
+                            <button class="header-btn">
+                                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                            </button>
+                            <div class="header-center">
+                                <div class="header-title">磨耳朵</div>
+                            </div>
+                            <div class="model-selector" style="font-size: 14px; font-weight: 500;">
+                                1/10
+                            </div>
+                        </div>
+                        
+                        <div class="player-content">
+                            <div class="now-playing">
+                                <div class="now-playing-text">こんにちは</div>
+                                <div class="now-playing-kana">こんにちは</div>
+                                <div class="now-playing-translation">你好</div>
+                            </div>
+                            
+                            <div class="player-list">
+                                <div class="player-item active">
+                                    <div class="sentence-text">こんにちは</div>
+                                    <div class="sentence-translation">你好</div>
+                                </div>
+                                <div class="player-item">
+                                    <div class="sentence-text">おはようございます</div>
+                                    <div class="sentence-translation">早上好</div>
+                                </div>
+                                <div class="player-item">
+                                    <div class="sentence-text">さようなら</div>
+                                    <div class="sentence-translation">再见</div>
+                                </div>
+                                <div class="player-item">
+                                    <div class="sentence-text">ありがとう</div>
+                                    <div class="sentence-translation">谢谢</div>
+                                </div>
+                            </div>
+                            
+                            <div class="player-controls">
+                                <button class="control-btn">⏮</button>
+                                <button class="control-btn play-btn">▶</button>
+                                <button class="control-btn">⏭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phone-frame">
+                <div class="phone-title">Settings Screen</div>
+                <div class="phone-screen">
+                    <div class="phone-inner">
+                        <div class="status-bar" style="background: transparent;">
+                            <span>9:41</span>
+                            <span>•••</span>
+                        </div>
+                        
+                        <div class="header">
+                            <button class="header-btn">
+                                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                            </button>
+                            <div class="header-center">
+                                <div class="header-title">设置</div>
+                            </div>
+                            <div style="width: 44px;"></div>
+                        </div>
+                        
+                        <div class="settings-content">
+                            <div class="settings-section">
+                                <div class="settings-section-title">语音</div>
+                                <div class="settings-card">
+                                    <div class="settings-row">
+                                        <span class="settings-label">播放翻译</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-thumb"></div>
+                                        </div>
+                                    </div>
+                                    <div class="settings-row">
+                                        <span class="settings-label">同一句间隔</span>
+                                        <span class="settings-value">3s</span>
+                                    </div>
+                                    <div class="settings-row">
+                                        <span class="settings-label">原文播放次数</span>
+                                        <span class="settings-value">4</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <div class="settings-section-title">通用</div>
+                                <div class="settings-card">
+                                    <div class="settings-row">
+                                        <span class="settings-label">母语</span>
+                                        <span class="settings-value">中文</span>
+                                    </div>
+                                    <div class="settings-row">
+                                        <span class="settings-label">学习语言</span>
+                                        <span class="settings-value">日语</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <div class="settings-section-title">关于</div>
+                                <div class="settings-card">
+                                    <div class="settings-row">
+                                        <span class="settings-label">BENKU v1.0.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
