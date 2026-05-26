@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   closeButton: {
     position: 'absolute',
     left: 16,
-    top: 16,
+    top: 60,
     width: 44,
     height: 44,
     borderRadius: 22,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   confirmButton: {
     position: 'absolute',
     right: 16,
-    top: 16,
+    top: 60,
     width: 44,
     height: 44,
     borderRadius: 22,
