@@ -291,6 +291,7 @@
             flex: 1;
             overflow-y: auto;
             padding: var(--space-md);
+            padding-bottom: 100px;
             display: flex;
             flex-direction: column;
             gap: var(--space-lg);
@@ -380,30 +381,34 @@
         }
 
         .input-area {
+            position: absolute;
+            bottom: 24px;
+            left: var(--space-md);
+            right: var(--space-md);
             display: flex;
-            gap: 10px;
-            padding: var(--space-sm) var(--space-md) calc(var(--space-md) + env(safe-area-inset-bottom, 0));
-            background: linear-gradient(to top, rgba(15, 13, 26, 0.98), transparent);
+            gap: 12px;
+            padding: 0;
+            background: transparent;
         }
 
         .input-wrapper {
             flex: 1;
             display: flex;
             align-items: center;
-            background: linear-gradient(to top, rgba(30, 27, 75, 0.95) 0%, rgba(30, 27, 75, 0.6) 100%);
+            background: rgba(30, 27, 75, 0.85);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--color-border-light);
-            border-radius: var(--radius-xl);
-            padding: 0 18px;
-            height: 52px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 0 20px;
+            height: 60px;
             transition: all var(--dur-fast) var(--ease-out);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
 
         .input-wrapper:focus-within {
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 2px var(--color-primary-glow), 0 8px 32px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 2px var(--color-primary-glow), 0 12px 40px rgba(0, 0, 0, 0.4);
         }
 
         .input-field {
@@ -411,7 +416,7 @@
             height: 100%;
             background: transparent;
             border: none;
-            font-size: 15px;
+            font-size: 16px;
             outline: none;
             color: var(--color-text-primary);
         }
@@ -421,8 +426,8 @@
         }
 
         .send-btn {
-            width: 52px;
-            height: 52px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
             border: none;
@@ -431,12 +436,12 @@
             justify-content: center;
             cursor: pointer;
             transition: all var(--dur-fast) var(--ease-out);
-            box-shadow: 0 8px 24px var(--color-primary-glow);
+            box-shadow: 0 12px 32px var(--color-primary-glow);
         }
 
         .send-btn:hover {
             transform: scale(1.08);
-            box-shadow: 0 12px 32px var(--color-primary-glow);
+            box-shadow: 0 16px 40px var(--color-primary-glow);
         }
 
         .send-btn:active {
@@ -444,8 +449,8 @@
         }
 
         .send-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             fill: #FFFFFF;
         }
 
