@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BENKU UI Preview</title>
+    <style>
+        /* Hallmark · macrostructure: Component Playground · tone: modern-minimal · anchor hue: warm */
+        /* Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V5 */
+        
+        :root {
+            /* Design Tokens - Quiet theme with yellow accent */
+            --color-paper: oklch(0.9876 0 0);
+            --color-paper-2: oklch(0.9706 0 0);
+            --color-paper-3: oklch(0.9476 0 0);
+            --color-ink: oklch(0.2103 0 0);
+            --color-ink-2: oklch(0.4473 0 0);
+            --color-ink-3: oklch(0.6395 0 0);
+            --color-accent: oklch(0.8928 0.1866 85.5287); /* yellow from #FFD43D */
+            --color-accent-2: oklch(0.8451 0.1761 86.1794);
+            
+            /* Fonts */
+            --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+            
+            /* Spacing - 4pt scale */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+            
+            /* Motion */
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+            --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+            --dur-fast: 150ms;
+            --dur-med: 250ms;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: var(--color-paper-2);
+            font-family: var(--font-body);
+            color: var(--color-ink);
+            overflow-x: clip;
+        }
+
+        .preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-xl);
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            padding: var(--space-xl) 0;
+        }
+
+        .preview-header h1 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .preview-header p {
+            color: var(--color-ink-2);
+            font-size: 1.125rem;
+        }
+
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .phone-frame {
+            background: var(--color-paper);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+        }
+
+        .phone-title {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--color-ink);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--color-paper-3);
+        }
+
+        /* Phone Screen Component */
+        .phone-screen {
+            width: 100%;
+            aspect-ratio: 9/19.5;
+            background: var(--color-paper-2);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+
+        .phone-inner {
+            width: 100%;
+            height: 100%;
+            background: #F5F7FA;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 16px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #030213;
+        }
+
+        /* Header */
+        .header {
+            height: 56px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: background var(--dur-fast) var(--ease-out);
+        }
+
+        .header-btn:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .header-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #FFD43D;
+        }
+
+        .header-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #030213;
+        }
+
+        .model-selector {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #717182;
+        }
+
+        /* Chat Screen */
+        .chat-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .bubble-user {
+            align-self: flex-end;
+            background: #FFF9E6;
+            color: #1F2937;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bubble-ai {
+            align-self: flex-start;
+            background: #ffffff;
+            color: #030213;
+            border-left: 2px solid #FFD43D;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px;
+            overflow-x: auto;
+        }
+
+        .quick-btn {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all var(--dur-fast) var(--ease-out);
+        }
+
+        .quick-btn.active {
+            background: #FFD43D;
+            color: #1F2937;
+        }
+
+        .quick-btn:not(.active) {
+            background: #F3F4F6;
+            color: #717182;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px 16px;
+            background: linear-gradient(to top, rgba(245, 247, 250, 1), rgba(245, 247, 250, 0));
+        }
+
+        .input-field {
+            flex: 1;
+            height: 48px;
+            background: #ffffff;
+            border-radius: 24px;
+            border: none;
+            padding: 0 16px;
+            font-size: 14px;
+            outline: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #FFD43D;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform var(--dur-fast) var(--ease-out);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Favorites Screen */
+        .favorites-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .folder-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .folder-tab {
+            padding: 6px 14px;
+            border-radius: 16px;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .folder-tab.active {
+            background: #FFD43D;
+            color: #1F2937;
+        }
+
+        .folder-tab:not(.active) {
+            background: #F3F4F6;
+            color: #717182;
+        }
+
+        .sentence-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sentence-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .sentence-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #030213;
+            margin-bottom: 4px;
+        }
+
+        .sentence-kana {
+            font-size: 12px;
+            color: #717182;
+            margin-bottom: 4px;
+        }
+
+        .sentence-translation {
+            font-size: 13px;
+            color: #717182;
+        }
+
+        .player-fab {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 14px 28px;
+            background: #FFD43D;
+            border-radius: 28px;
+            border: none;
+            font-weight: 700;
+            font-size: 14px;
+            color: #1F2937;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 212, 61, 0.4);
+        }
+
+        /* Player Screen */
+        .player-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .now-playing {
+            background: #ffffff;
+            padding: 24px 16px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .now-playing-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: #030213;
+            margin-bottom: 6px;
+        }
+
+        .now-playing-kana {
+            font-size: 14px;
+            color: #717182;
+            margin-bottom: 6px;
+        }
+
+        .now-playing-translation {
+            font-size: 13px;
+            color: #717182;
+        }
+
+        .player-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 16px 140px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .player-item {
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .player-item.active {
+            background: #FFF8E1;
+            border: 1px solid #FFD43D;
+        }
+
+        .player-item:not(.active) {
+            background: #ffffff;
+        }
+
+        .player-controls {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .control-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #F3F4F6;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .play-btn {
+            width: 72px;
+            height: 72px;
+            background: #FFD43D;
+            font-size: 24px;
+        }
+
+        /* Settings Screen */
+        .settings-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .settings-section {
+            margin-bottom: 24px;
+        }
+
+        .settings-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #717182;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
+        .settings-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            font-size: 14px;
+            color: #030213;
+        }
+
+        .toggle-switch {
+            width: 48px;
+            height: 28px;
+            background: #F3F4F6;
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle-switch.active {
+            background: #FFD43D;
+        }
+
+        .toggle-thumb {
+            width: 24px;
+            height: 24px;
+            background: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active .toggle-thumb {
+            left: 22px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .preview-container {
+                padding: var(--space-lg);
+            }
+            .screens-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <div class="preview-header">
+            <h1>BENKU UI Preview</h1>
+            <p>保持现有布局，更精致的设计</p>
+        </div>
+        
+        <div class="screens-grid">
+            <!-- Chat Screen -->
+            <div class="phone-frame">
+                <div class="phone-title">Chat Screen</div>
+                <div class="phone-screen">
+                    <div class="phone-inner">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>•••</span>
+                        </div>
+                        
+                        <div class="header">
+                            <button class="header-btn">
+                                <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                            </button>
+                            <div class="header-center">
+                                <div class="header-title">BENKU</div>
+                                <div class="model-selector">
+                                    <span>GPT-4</span>
+                                    <span>▼</span>
+                                </div>
+                            </div>
+                            <button class="header-btn">
+                                <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                            </button>
+                        </div>
+                        
+                        <div class="chat-content">
+                            <div class="bubble bubble-ai">
+                                こんにちは！今日は何を勉強しましょうか？
+                            </div>
+                            <div class="bubble bubble-user">
+                                「こんにちは」を自然な言い方で教えてください
+                            </div>
+                            <div class="bubble bubble-ai">
+                                自然な会話では「こんちはー」や「ちわっ」のように少し崩した言い方も使われます。
+                            </div>
+                        </div>
+                        
+                        <div class="quick-actions">
+                            <button class="quick-btn active">日语怎么说 ▼</button>
+                            <button class="quick-btn">什么意思</button>
+                            <button class="quick-btn">自由提问</button>
+                        </div>
+                        
+                        <div class="input-area">
+                            <input class="input-field" placeholder="输入想问的句子或单词" />
+                            <button class="send-btn">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="#1F2937">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Favorites Screen -->
+            <div class="phone-frame">
+                <div class="phone-title">Favorites Screen</div>
+                <div class="phone-screen">
+                    <div class="phone-inner">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>•••</span>
+                        </div>
+                        
+                        <div class="header">
+                            <button class="header-btn">
+                                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22l-1.92 3.32c-.12.2-.07.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.2.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                            </button>
+                            <div class="header-center">
+                                <div class="header-title">收藏夹</div>
+                            </div>
+                            <button class="header-btn" style="font-size: 14px; width: auto; padding: 0 12px;">
+                                创建
+                            </button>
+                        </div>
+                        
+                        <div class="favorites-content">
+                            <div class="folder-tabs">
+                                <button class="folder-tab active">全部</button>
+                                <button class="folder-tab">日常用语</button>
+                                <button class="folder-tab">旅游</button>
+                            </div>
+                            
+                            <div class="sentence-list">
+                                <div class="sentence-card">
+                                    <div class="sentence-text">⭐ こんにちは</div>
+                                    <div class="sentence-kana">こんにちは</div>
+                                    <div class="sentence-translation">你好</div>
+                                </div>
+                                <div class="sentence-card">
+                                    <div class="sentence-text">おはようございます</div>
+                                    <div class="sentence-kana">おはようございます</div>
+                                    <div class="sentence-translation">早上好</div>
+                                </div>
+                                <div class="sentence-card">
+                                    <div class="sentence-text">さようなら</div>
+                                    <div class="sentence-kana">さようなら</div>
+                                    <div class="sentence-translation">再见</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="player-fab">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1F2937">
+                                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                            </svg>
+                            磨耳朵
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Screen -->
+            <div class="phone-frame">
+                <div class="phone-title">Player Screen</div>
+                <div class="phone-screen">
+                    <div class="phone-inner">
+                        <div class="status-bar" style="background: transparent;">
+                            <span>9:41</span>
+                            <span>•••</span>
+                        </div>
+                        
+                        <div class="header">
+                            <button class="header-btn" style="color: #717182;">
+                                ✕
+                            </button>
+                            <div class="header-center">
+                                <div class="header-title">磨耳朵</div>
+                            </div>
+                            <div style="font-size: 14px; color: #717182;">
+                                1/10
+                            </div>
+                        </div>
+                        
+                        <div class="player-content">
+                            <div class="now-playing">
+                                <div class="now-playing-text">こんにちは</div>
+                                <div class="now-playing-kana">こんにちは</div>
+                                <div class="now-playing-translation">你好</div>
+                            </div>
+                            
+                            <div class="player-list">
+                                <div class="player-item active">
+                                    <div class="sentence-text">こんにちは</div>
+                                    <div class="sentence-translation">你好</div>
+                                </div>
+                                <div class="player-item">
+                                    <div class="sentence-text">おはようございます</div>
+                                    <div class="sentence-translation">早上好</div>
+                                </div>
+                                <div class="player-item">
+                                    <div class="sentence-text">さようなら</div>
+                                    <div class="sentence-translation">再见</div>
+                                </div>
+                                <div class="player-item">
+                                    <div class="sentence-text">ありがとう</div>
+                                    <div class="sentence-translation">谢谢</div>
+                                </div>
+                            </div>
+                            
+                            <div class="player-controls">
+                                <button class="control-btn">⏮</button>
+                                <button class="control-btn play-btn">▶</button>
+                                <button class="control-btn">⏭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Screen -->
+            <div class="phone-frame">
+                <div class="phone-title">Settings Screen</div>
+                <div class="phone-screen">
+                    <div class="phone-inner">
+                        <div class="status-bar" style="background: transparent;">
+                            <span>9:41</span>
+                            <span>•••</span>
+                        </div>
+                        
+                        <div class="header">
+                            <button class="header-btn" style="color: #717182;">
+                                ✕
+                            </button>
+                            <div class="header-center">
+                                <div class="header-title">设置</div>
+                            </div>
+                            <div style="width: 40px;"></div>
+                        </div>
+                        
+                        <div class="settings-content">
+                            <div class="settings-section">
+                                <div class="settings-section-title">语音</div>
+                                <div class="settings-card">
+                                    <div class="settings-row">
+                                        <span class="settings-label">播放翻译</span>
+                                        <div class="toggle-switch active">
+                                            <div class="toggle-thumb"></div>
+                                        </div>
+                                    </div>
+                                    <div class="settings-row">
+                                        <span class="settings-label">同一句间隔</span>
+                                        <span style="color: #717182; font-size: 14px; font-weight: 600;">3s</span>
+                                    </div>
+                                    <div class="settings-row">
+                                        <span class="settings-label">原文播放次数</span>
+                                        <span style="color: #717182; font-size: 14px; font-weight: 600;">4</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <div class="settings-section-title">通用</div>
+                                <div class="settings-card">
+                                    <div class="settings-row">
+                                        <span class="settings-label">母语</span>
+                                        <span style="color: #030213; font-size: 14px; font-weight: 600;">中文</span>
+                                    </div>
+                                    <div class="settings-row">
+                                        <span class="settings-label">学习语言</span>
+                                        <span style="color: #030213; font-size: 14px; font-weight: 600;">日语</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <div class="settings-section-title">关于</div>
+                                <div class="settings-card">
+                                    <div class="settings-row">
+                                        <span class="settings-label">BENKU v1.0.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
