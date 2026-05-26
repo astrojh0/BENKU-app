@@ -8,16 +8,18 @@
         :root {
             --bg: #F4F4F8;
             --bg-card: #FFFFFF;
+            --bg-card-inner: #FAFAFC;
             --text-primary: #1A1A1E;
             --text-secondary: #6B6B70;
             --text-muted: #AEAEB2;
             --border: #F2F2F7;
+            --inner-border: rgba(245, 245, 250, 0.8);
             --radius-xl: 40px;
             --radius-lg: 28px;
             --radius-md: 20px;
             --radius-full: 9999px;
-            --shadow-btn: 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 -2px 4px rgba(0, 0, 0, 0.04);
-            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.06);
+            --shadow-btn: 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 -2px 4px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.6);
         }
 
         * {
@@ -135,6 +137,16 @@
             border-radius: 50%;
             box-shadow: var(--shadow-btn);
             transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .header-btn::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
+            pointer-events: none;
         }
 
         .header-btn:active {
@@ -145,6 +157,8 @@
         .header-btn svg {
             width: 22px;
             height: 22px;
+            position: relative;
+            z-index: 1;
         }
 
         .header-center {
@@ -190,6 +204,20 @@
             line-height: 1.55;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-card);
+            position: relative;
+        }
+
+        .bubble-ai {
+            background: var(--bg-card);
+        }
+
+        .bubble-ai::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: calc(var(--radius-lg) - 1px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
+            pointer-events: none;
         }
 
         .bubble-user {
@@ -197,13 +225,6 @@
             background: var(--text-primary);
             color: var(--bg-card);
             border-bottom-right-radius: 8px;
-        }
-
-        .bubble-ai {
-            align-self: flex-start;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border-bottom-left-radius: 8px;
         }
 
         .quick-actions {
@@ -227,6 +248,16 @@
             white-space: nowrap;
             box-shadow: var(--shadow-btn);
             transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .quick-btn::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: calc(var(--radius-full) - 2px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), transparent);
+            pointer-events: none;
         }
 
         .quick-btn:active {
@@ -258,6 +289,16 @@
             padding: 0 24px;
             height: 58px;
             box-shadow: var(--shadow-btn);
+            position: relative;
+        }
+
+        .input-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: calc(var(--radius-xl) - 2px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
+            pointer-events: none;
         }
 
         .input-field {
@@ -268,6 +309,8 @@
             font-size: 15px;
             outline: none;
             color: var(--text-primary);
+            position: relative;
+            z-index: 1;
         }
 
         .input-field::placeholder {
@@ -328,6 +371,16 @@
             white-space: nowrap;
             box-shadow: var(--shadow-btn);
             transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .folder-tab::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: calc(var(--radius-full) - 2px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), transparent);
+            pointer-events: none;
         }
 
         .folder-tab:active {
@@ -361,6 +414,16 @@
             box-shadow: var(--shadow-card);
             cursor: pointer;
             transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .sentence-card::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: calc(var(--radius-lg) - 1px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
+            pointer-events: none;
         }
 
         .sentence-card:active {
@@ -373,17 +436,23 @@
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
         }
 
         .sentence-kana {
             font-size: 12px;
             color: var(--text-muted);
             margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
         }
 
         .sentence-translation {
             font-size: 13px;
             color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
         }
 
         .player-fab {
@@ -466,6 +535,16 @@
             background: var(--bg-card);
             box-shadow: var(--shadow-card);
             transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .player-item::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: calc(var(--radius-lg) - 1px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
+            pointer-events: none;
         }
 
         .player-item:active {
@@ -506,6 +585,16 @@
             color: var(--text-primary);
             box-shadow: var(--shadow-btn);
             transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .control-btn::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: calc(50% - 2px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), transparent);
+            pointer-events: none;
         }
 
         .control-btn:active {
@@ -520,6 +609,10 @@
             color: var(--bg-card);
             font-size: 24px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .play-btn::after {
+            display: none;
         }
 
         .settings-content {
@@ -551,6 +644,16 @@
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-card);
+            position: relative;
+        }
+
+        .settings-card::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: calc(var(--radius-lg) - 1px);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
+            pointer-events: none;
         }
 
         .settings-row {
@@ -561,6 +664,8 @@
             border-bottom: 1px solid var(--border);
             cursor: pointer;
             transition: all 0.15s ease;
+            position: relative;
+            z-index: 1;
         }
 
         .settings-row:last-child {
