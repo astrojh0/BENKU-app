@@ -6,20 +6,18 @@
     <title>BENKU UI Preview - Pure White Theme</title>
     <style>
         :root {
-            --bg: #F3F4F6;
+            --bg: #F4F4F8;
             --bg-card: #FFFFFF;
-            --text-primary: #111827;
-            --text-secondary: #6B7280;
-            --text-muted: #9CA3AF;
-            --border: #E5E7EB;
-            --radius-xl: 32px;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
+            --text-primary: #1A1A1E;
+            --text-secondary: #6B6B70;
+            --text-muted: #AEAEB2;
+            --border: #F2F2F7;
+            --radius-xl: 40px;
+            --radius-lg: 28px;
+            --radius-md: 20px;
             --radius-full: 9999px;
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.06);
-            --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.08);
-            --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-btn: 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 -2px 4px rgba(0, 0, 0, 0.04);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.06);
         }
 
         * {
@@ -69,7 +67,7 @@
         }
 
         .phone-frame {
-            background: var(--bg);
+            background: transparent;
             border-radius: var(--radius-xl);
             padding: 0;
             display: flex;
@@ -102,7 +100,7 @@
             background: var(--bg);
             display: flex;
             flex-direction: column;
-            padding: 16px 20px;
+            padding: 20px 24px;
         }
 
         .status-bar {
@@ -117,16 +115,16 @@
         }
 
         .header {
-            height: 60px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 4px;
+            padding: 0 8px;
         }
 
         .header-btn {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -135,18 +133,18 @@
             cursor: pointer;
             color: var(--text-primary);
             border-radius: 50%;
-            box-shadow: var(--shadow-soft), var(--shadow-inner);
-            transition: all 0.2s ease;
+            box-shadow: var(--shadow-btn);
+            transition: all 0.15s ease;
         }
 
         .header-btn:active {
-            box-shadow: var(--shadow-inner);
-            transform: scale(0.98);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: scale(0.97);
         }
 
         .header-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
         }
 
         .header-center {
@@ -174,11 +172,11 @@
         .chat-content {
             flex: 1;
             overflow-y: auto;
-            padding: 24px 4px;
-            padding-bottom: 200px;
+            padding: 28px 8px;
+            padding-bottom: 210px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
         }
 
         .chat-content::-webkit-scrollbar {
@@ -187,38 +185,38 @@
 
         .bubble {
             max-width: 82%;
-            padding: 14px 18px;
+            padding: 16px 20px;
             font-size: 15px;
             line-height: 1.55;
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-soft);
+            box-shadow: var(--shadow-card);
         }
 
         .bubble-user {
             align-self: flex-end;
             background: var(--text-primary);
             color: var(--bg-card);
-            border-bottom-right-radius: 6px;
+            border-bottom-right-radius: 8px;
         }
 
         .bubble-ai {
             align-self: flex-start;
             background: var(--bg-card);
             color: var(--text-primary);
-            border-bottom-left-radius: 6px;
+            border-bottom-left-radius: 8px;
         }
 
         .quick-actions {
             position: absolute;
-            bottom: 112px;
-            left: 20px;
-            right: 20px;
+            bottom: 116px;
+            left: 24px;
+            right: 24px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .quick-btn {
-            padding: 12px 18px;
+            padding: 14px 20px;
             border-radius: var(--radius-full);
             border: none;
             font-size: 13px;
@@ -227,28 +225,28 @@
             color: var(--text-secondary);
             cursor: pointer;
             white-space: nowrap;
-            box-shadow: var(--shadow-soft), var(--shadow-inner);
-            transition: all 0.2s ease;
+            box-shadow: var(--shadow-btn);
+            transition: all 0.15s ease;
         }
 
         .quick-btn:active {
-            box-shadow: var(--shadow-inner);
-            transform: scale(0.98);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: scale(0.97);
         }
 
         .quick-btn.active {
             background: var(--text-primary);
             color: var(--bg-card);
-            box-shadow: var(--shadow-soft);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
         .input-area {
             position: absolute;
             bottom: 28px;
-            left: 20px;
-            right: 20px;
+            left: 24px;
+            right: 24px;
             display: flex;
-            gap: 12px;
+            gap: 14px;
         }
 
         .input-wrapper {
@@ -256,10 +254,10 @@
             display: flex;
             align-items: center;
             background: var(--bg-card);
-            border-radius: var(--radius-full);
-            padding: 0 22px;
-            height: 54px;
-            box-shadow: var(--shadow-soft), var(--shadow-inner);
+            border-radius: var(--radius-xl);
+            padding: 0 24px;
+            height: 58px;
+            box-shadow: var(--shadow-btn);
         }
 
         .input-field {
@@ -277,8 +275,8 @@
         }
 
         .send-btn {
-            width: 54px;
-            height: 54px;
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
             background: var(--text-primary);
             border: none;
@@ -287,31 +285,30 @@
             justify-content: center;
             cursor: pointer;
             color: var(--bg-card);
-            box-shadow: var(--shadow-soft);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transition: all 0.15s ease;
         }
 
         .send-btn:active {
-            transform: scale(0.96);
-            box-shadow: var(--shadow-soft);
+            transform: scale(0.95);
         }
 
         .send-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
         }
 
         .favorites-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 0 4px;
+            padding: 0 8px;
         }
 
         .folder-tabs {
             display: flex;
-            gap: 10px;
-            padding: 8px 0;
+            gap: 12px;
+            padding: 12px 0;
             overflow-x: auto;
         }
 
@@ -320,7 +317,7 @@
         }
 
         .folder-tab {
-            padding: 10px 20px;
+            padding: 12px 22px;
             border-radius: var(--radius-full);
             border: none;
             font-size: 13px;
@@ -329,28 +326,28 @@
             color: var(--text-secondary);
             cursor: pointer;
             white-space: nowrap;
-            box-shadow: var(--shadow-soft), var(--shadow-inner);
-            transition: all 0.2s ease;
+            box-shadow: var(--shadow-btn);
+            transition: all 0.15s ease;
         }
 
         .folder-tab:active {
-            box-shadow: var(--shadow-inner);
-            transform: scale(0.98);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: scale(0.97);
         }
 
         .folder-tab.active {
             background: var(--text-primary);
             color: var(--bg-card);
-            box-shadow: var(--shadow-soft);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
         .sentence-list {
             flex: 1;
             overflow-y: auto;
-            padding: 16px 0;
+            padding: 20px 0;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
         }
 
         .sentence-list::-webkit-scrollbar {
@@ -360,15 +357,15 @@
         .sentence-card {
             background: var(--bg-card);
             border-radius: var(--radius-lg);
-            padding: 20px;
-            box-shadow: var(--shadow-soft);
+            padding: 22px;
+            box-shadow: var(--shadow-card);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
         }
 
         .sentence-card:active {
             transform: scale(0.98);
-            box-shadow: var(--shadow-inner);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
         }
 
         .sentence-text {
@@ -397,7 +394,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 16px 36px;
+            padding: 18px 40px;
             background: var(--text-primary);
             border-radius: var(--radius-full);
             border: none;
@@ -405,33 +402,33 @@
             font-size: 15px;
             color: var(--bg-card);
             cursor: pointer;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transition: all 0.15s ease;
         }
 
         .player-fab:active {
-            transform: translateX(-50%) scale(0.96);
+            transform: translateX(-50%) scale(0.95);
         }
 
         .player-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 0 4px;
+            padding: 0 8px;
         }
 
         .now-playing {
             background: var(--text-primary);
-            padding: 40px 24px;
+            padding: 44px 28px;
             text-align: center;
             color: var(--bg-card);
             border-radius: var(--radius-lg);
-            margin: 8px 0;
-            box-shadow: var(--shadow-soft);
+            margin: 12px 0;
+            box-shadow: var(--shadow-card);
         }
 
         .now-playing-text {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
             margin-bottom: 8px;
             letter-spacing: -0.02em;
@@ -451,11 +448,11 @@
         .player-list {
             flex: 1;
             overflow-y: auto;
-            padding: 16px 0;
-            padding-bottom: 160px;
+            padding: 20px 0;
+            padding-bottom: 170px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
         }
 
         .player-list::-webkit-scrollbar {
@@ -463,17 +460,16 @@
         }
 
         .player-item {
-            padding: 20px;
+            padding: 22px;
             border-radius: var(--radius-lg);
             cursor: pointer;
             background: var(--bg-card);
-            box-shadow: var(--shadow-soft);
-            transition: all 0.2s ease;
+            box-shadow: var(--shadow-card);
+            transition: all 0.15s ease;
         }
 
         .player-item:active {
             transform: scale(0.98);
-            box-shadow: var(--shadow-inner);
         }
 
         .player-item.active {
@@ -493,12 +489,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 24px;
+            gap: 28px;
         }
 
         .control-btn {
-            width: 52px;
-            height: 52px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             background: var(--bg-card);
             border: none;
@@ -508,33 +504,28 @@
             cursor: pointer;
             font-size: 18px;
             color: var(--text-primary);
-            box-shadow: var(--shadow-soft), var(--shadow-inner);
-            transition: all 0.2s ease;
+            box-shadow: var(--shadow-btn);
+            transition: all 0.15s ease;
         }
 
         .control-btn:active {
-            box-shadow: var(--shadow-inner);
-            transform: scale(0.96);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: scale(0.95);
         }
 
         .play-btn {
-            width: 68px;
-            height: 68px;
+            width: 72px;
+            height: 72px;
             background: var(--text-primary);
             color: var(--bg-card);
-            font-size: 22px;
-            box-shadow: var(--shadow-soft);
-        }
-
-        .play-btn:active {
-            box-shadow: var(--shadow-soft);
-            transform: scale(0.96);
+            font-size: 24px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
         .settings-content {
             flex: 1;
             overflow-y: auto;
-            padding: 16px 4px;
+            padding: 20px 8px;
         }
 
         .settings-content::-webkit-scrollbar {
@@ -542,7 +533,7 @@
         }
 
         .settings-section {
-            margin-bottom: 32px;
+            margin-bottom: 36px;
         }
 
         .settings-section-title {
@@ -551,7 +542,7 @@
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             padding-left: 8px;
         }
 
@@ -559,17 +550,17 @@
             background: var(--bg-card);
             border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: var(--shadow-soft);
+            box-shadow: var(--shadow-card);
         }
 
         .settings-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 18px 20px;
+            padding: 20px 22px;
             border-bottom: 1px solid var(--border);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
         }
 
         .settings-row:last-child {
@@ -577,7 +568,7 @@
         }
 
         .settings-row:active {
-            background: var(--border);
+            background: rgba(0, 0, 0, 0.02);
         }
 
         .settings-label {
@@ -593,13 +584,12 @@
         }
 
         .toggle-switch {
-            width: 52px;
-            height: 30px;
-            background: var(--border);
+            width: 54px;
+            height: 32px;
+            background: var(--text-muted);
             border-radius: var(--radius-full);
             position: relative;
             cursor: pointer;
-            box-shadow: var(--shadow-inner);
             transition: all 0.2s ease;
         }
 
@@ -608,14 +598,14 @@
         }
 
         .toggle-thumb {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             background: var(--bg-card);
             border-radius: 50%;
             position: absolute;
             top: 2px;
             left: 2px;
-            box-shadow: var(--shadow-soft);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
             transition: all 0.2s ease;
         }
 
@@ -712,7 +702,7 @@
                             <div class="header-center">
                                 <div class="header-title">收藏夹</div>
                             </div>
-                            <button class="header-btn" style="font-size: 14px; width: auto; padding: 0 20px; font-weight: 600;">
+                            <button class="header-btn" style="font-size: 14px; width: auto; padding: 0 22px; font-weight: 600;">
                                 创建
                             </button>
                         </div>
@@ -826,7 +816,7 @@
                             <div class="header-center">
                                 <div class="header-title">设置</div>
                             </div>
-                            <div style="width: 48px;"></div>
+                            <div style="width: 52px;"></div>
                         </div>
                         
                         <div class="settings-content">
